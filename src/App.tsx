@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import "./App.css";
-import NewMapPage from "./pages/NewMapPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
+import NavBar from "./components/NavBar";
+import HomePage from "./pages/HomePage";
+import TestActivityPage from "./pages/TestActivityPage";
 import AuthPage from "./pages/AuthPage";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import ProtectedRoutes from "./pages/protected/ProtectedRoutes";
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoutes from "./pages/ProtectedRoutes";
 import { CssBaseline } from "@mui/material";
 import "./App.css";
+import RequireAuth from "./pages/RequireAuth";
+import VKAuth from "./components/VkAuth";
 
 function App() {
-    const [user, setUser] = useState<any | null>(null);
-    const navigate = useNavigate();
-
     const theme = createTheme({
         palette: {
             primary: {
@@ -30,9 +29,23 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Routes>
-                <Route path="/*" element={<ProtectedRoutes />} />
-                <Route path="/test" element={<NewMapPage />} />
-                <Route path="/auth" element={<AuthPage />} />
+                {/* public routes */}
+                <Route index element={<AuthPage />} />
+                <Route path="/auth/vk" element={<VKAuth />} />
+
+                {/* protected routes */}
+                <Route element={<RequireAuth />}>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route
+                        path="/task"
+                        element={
+                            <>
+                                <h1>Hello</h1>
+                            </>
+                        }
+                    />
+                    <Route path="activity" element={<TestActivityPage />} />
+                </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </ThemeProvider>

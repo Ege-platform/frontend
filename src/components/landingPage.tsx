@@ -1,10 +1,10 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useRef } from "react";
 
-import LandingData from "../assets/LandingData.svg";
+// @ts-ignore
 import VideoJS from "../components/VideoJS";
 
-export default function LandingPage() {
+export default function AuthVideo() {
     const videoJsOptions = {
         autoplay: true,
         controls: true,
@@ -21,14 +21,14 @@ export default function LandingPage() {
         const playerRef = useRef(null);
         playerRef.current = player;
 
-        // You can handle player events here, for example:
-        player.on("waiting", () => {
-            videojs.log("player is waiting");
-        });
+        // // You can handle player events here, for example:
+        // player.on("waiting", () => {
+        //     videojs.log("player is waiting");
+        // });
 
-        player.on("dispose", () => {
-            videojs.log("player will dispose");
-        });
+        // player.on("dispose", () => {
+        //     videojs.log("player will dispose");
+        // });
     };
     return (
         <Box sx={{ width: 632, height: 532, m: 5 }}>

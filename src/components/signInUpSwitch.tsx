@@ -1,5 +1,4 @@
-import { BorderBottom } from "@mui/icons-material";
-import { Typography, Button, Stack, Box } from "@mui/material";
+import { Button, Stack, Box } from "@mui/material";
 
 interface SwitchProps {
     isSignIn: boolean;

@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import TestActivityPage from "./TestActivityPage";
 import HomePage from "./HomePage";
-import NotFoundPage from "../NotFoundPage";
-import NavBar from "../../components/NavBar";
+import NotFoundPage from "./NotFoundPage";
+import NavBar from "../components/NavBar";
 
 export default function ProtectedRoutes() {
     return (

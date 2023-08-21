@@ -1,43 +1,66 @@
 import {
-    Card,
     Stack,
     Button,
-    Paper,
     Container,
-    Avatar,
     CssBaseline,
     Box,
-    Typography,
     Grid,
-    Checkbox,
-    FormControlLabel,
     TextField,
 } from "@mui/material";
 import { FormEvent, useState } from "react";
 
 import CopyrightComponent from "../Copyright";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import { useNavigate } from "react-router-dom";
-import { register } from "../lib/api";
+
+import { useDispatch } from "react-redux";
+import { setCredentials, setUser } from "../feature/user/authSlice";
+import {
+    useRegisterMutation,
+    useGetCurrentUserMutation,
+} from "../feature/user/authApiSlice";
+import { store } from "../app/store";
+// import { }
 
 export default function SignUpForm() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [register, { isLoading }] = useRegisterMutation();
+    const [getCurrentUser] = useGetCurrentUserMutation();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    async function handleLogin(e: FormEvent<HTMLFormElement>) {
+    async function handleSignUp(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
-            await register(username, email, password);
-            navigate("/");
-        } catch (e) {
-            console.log(e);
+            const data = await register({
+                username: username,
+                email: email,
+                password: password,
+            }).unwrap();
+
+            dispatch(
+                setCredentials({ accessToken: data.accessToken, user: null }),
+            );
+
+            navigate("/home");
+        } catch (err: any) {
+            if (err.response) {
+                console.log(err.response);
+            } else if (err.response.status === 400) {
+                console.log(err.response);
+            } else if (err.response.status === 401) {
+                console.log(err.response);
+            } else {
+                console.log(err.response);
+            }
+            console.log(err);
         }
     }
 
     return (
-        <Box component="form" onSubmit={handleLogin} sx={{ ml: 2, pl: 2 }}>
+        <Box component="form" onSubmit={handleSignUp} sx={{ ml: 2, pl: 2 }}>
             <Stack direction="column">
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />

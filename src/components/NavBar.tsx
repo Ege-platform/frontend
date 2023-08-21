@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,31 +15,73 @@ import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import { Stack } from "@mui/material";
 import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getUser, logout } from "../lib/api";
+import {
+    selectCurrentUser,
+    setCredentials,
+    selectCurrentToken,
+    logoutUser,
+} from "../feature/user/authSlice";
+import { useSelector } from "react-redux";
+import { useGetCurrentUserMutation } from "../feature/user/authApiSlice";
+import { useDispatch } from "react-redux";
 
 export default function NavBar() {
     const navigate = useNavigate();
+    const currentUser = useSelector(selectCurrentUser);
+    const currentToken = useSelector(selectCurrentToken);
+    const [getCurrentUser] = useGetCurrentUserMutation();
+
+    const dispatch = useDispatch();
+
     const navLinks = [
-        ["Вселенная", "/"],
+        ["Вселенная", "/home"],
         ["Генератор заданий", "/task"],
         ["Активность", "/activity"],
     ];
-    const [userExperience, setUserExperience] = React.useState(0);
-    const [userCoins, setUserCoins] = React.useState(0);
 
-    // set UserExperience and UserCoins from server
-    React.useEffect(() => {
-        const user = getUser();
+    const [userExperience, setUserExperience] = useState(0);
+    const [userCoins, setUserCoins] = useState(0);
 
-        console.log(`data: ${user?.experience} ${user?.coins}`);
-
-        setUserExperience(user?.experience);
-        setUserCoins(user?.coins);
+    useEffect(() => {
+        let user = currentUser;
+        async function fetchUser() {
+            try {
+                const data = await getCurrentUser({}).unwrap();
+                console.log(`data:`, data);
+                setUserCoins(data.coins);
+                setUserExperience(data.experience);
+                if (currentToken == null || currentToken == undefined) {
+                    console.log(`currentToken is null`);
+                    return;
+                }
+                dispatch(
+                    setCredentials({
+                        accessToken: currentToken,
+                        user: data,
+                    }),
+                );
+            } catch (e) {
+                console.log("error", e);
+            }
+        }
+        if (user != null) {
+            setUserExperience(user.experience);
+            setUserCoins(user.coins);
+        } else {
+            fetchUser();
+            // console.log new store
+            user = currentUser;
+            console.log("fetch user", user);
+            if (user == null) {
+                console.log("user is null");
+                return;
+            }
+            setUserExperience(user.experience);
+            setUserCoins(user.coins);
+        }
     }, []);
 
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-        null,
-    );
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -140,7 +182,6 @@ export default function NavBar() {
                     >
                         <Stack direction={"row"}>
                             {navLinks.map(([name, link]) => {
-                                console.log(name, link);
                                 return (
                                     <NavLink
                                         to={link}
@@ -175,8 +216,8 @@ export default function NavBar() {
                                 textDecoration: "none",
                             }}
                             onClick={() => {
-                                logout();
-                                navigate("/auth");
+                                dispatch(logoutUser());
+                                navigate("/");
                             }}
                         >
                             Выйти

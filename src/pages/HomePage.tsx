@@ -1,9 +1,9 @@
 import { Container, Grid } from "@mui/material";
-import MapCard from "../../components/MapCard";
+import MapCard from "../components/MapCard";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import map from "../../assets/map.svg";
+import map from "../assets/map.svg";
 
 export default function HomePage() {
     const HomePageTheme = createTheme({

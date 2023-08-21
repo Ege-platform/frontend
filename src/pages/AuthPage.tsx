@@ -1,7 +1,7 @@
 import { Box, Stack, Card, Typography, IconButton } from "@mui/material";
 import SignUpForm from "../components/SignUpForm";
 import SignInForm from "../components/SignInForm";
-import LandingPage from "../components/landingPage";
+import AuthVideo from "../components/landingPage";
 import SignInUpSwitch from "../components/signInUpSwitch";
 import { useState, useEffect } from "react";
 // @ts-ignore
@@ -9,17 +9,29 @@ import TelegramLoginButton from "react-telegram-login";
 import VkIcon from "../icons/vk";
 import TelegramIcon from "../icons/telegram";
 import { useTheme } from "@mui/material/styles";
-import { VkAuth, TgAuth, GoogleAuth } from "../lib/api";
 import { useNavigate } from "react-router-dom";
-import { checkAuth } from "../lib/api";
+import { useDispatch } from "react-redux";
+import {
+    useGetCurrentUserMutation,
+    useLoginVkMutation,
+} from "../feature/user/authApiSlice";
+import { setUser, setCredentials } from "../feature/user/authSlice";
+import { WindowOutlined } from "@mui/icons-material";
 
 export default function AuthPage() {
     const theme = useTheme();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [getCurrentUser] = useGetCurrentUserMutation();
+    const [loginVk] = useLoginVkMutation();
 
     useEffect(() => {
-        if (checkAuth()) {
-            navigate("/");
+        // try to get token from local storage
+        const token = localStorage.getItem("token");
+        console.log(`token from local storage: ${token}`);
+        if (token != null) {
+            dispatch(setCredentials({ accessToken: token, user: null }));
+            navigate("/home");
         }
     }, []);
 
@@ -34,21 +46,14 @@ export default function AuthPage() {
     };
 
     const handleVkAuth = async () => {
-        const redirect_url = await VkAuth();
-        window.location.replace(redirect_url);
-    };
-
-    const handleGoogleAuth = async () => {
-        GoogleAuth();
-    };
-
-    async function handleTelegramResponse(response: any) {
-        TgAuth(response);
-        console.log(response);
-        if (response) {
-            navigate("/");
+        try {
+            const redirect_url = await loginVk({}).unwrap();
+            console.log(`data: ${redirect_url}`);
+            window.open(redirect_url, "_self");
+        } catch (e) {
+            console.log("error", e);
         }
-    }
+    };
 
     return (
         <>
@@ -89,7 +94,11 @@ export default function AuthPage() {
                                         fill={theme.palette.primary.main}
                                     />
                                 </IconButton>
-                                <IconButton onClick={handleGoogleAuth}>
+                                <IconButton
+                                    onClick={() => {
+                                        console.log("google login");
+                                    }}
+                                >
                                     <TelegramIcon
                                         height={40}
                                         width={40}
@@ -98,11 +107,13 @@ export default function AuthPage() {
                                 </IconButton>
                             </Stack>
                             <TelegramLoginButton
-                                dataOnauth={handleTelegramResponse}
+                                dataOnauth={() => {
+                                    console.log("telegram login");
+                                }}
                                 botName="dorogoy_dnevnik_bot"
                             />
                         </Stack>
-                        <LandingPage />
+                        <AuthVideo />
                     </Stack>
                 </Card>
             </Box>
