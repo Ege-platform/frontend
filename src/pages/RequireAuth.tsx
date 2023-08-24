@@ -1,4 +1,4 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../feature/user/authSlice";
 import { useEffect } from "react";
@@ -25,5 +25,9 @@ export default function RequireAuth() {
         }
     }, [token]);
 
-    return token ? <NavBar /> : <Navigate to="/" state={{ from: location }} />;
+    return token ? (
+        <NavBar />
+    ) : (
+        <Navigate to="/auth" state={{ from: location }} />
+    );
 }

@@ -39,7 +39,7 @@ export default function SignInForm() {
             dispatch(
                 setCredentials({ accessToken: data.accessToken, user: null }),
             );
-            navigate("/home");
+            navigate("/");
         } catch (err: any) {
             if (err.response) {
                 setError("Network error");

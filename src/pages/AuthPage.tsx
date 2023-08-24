@@ -31,7 +31,7 @@ export default function AuthPage() {
         console.log(`token from local storage: ${token}`);
         if (token != null) {
             dispatch(setCredentials({ accessToken: token, user: null }));
-            navigate("/home");
+            navigate("/");
         }
     }, []);
 

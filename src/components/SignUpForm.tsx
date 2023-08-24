@@ -44,7 +44,7 @@ export default function SignUpForm() {
                 setCredentials({ accessToken: data.accessToken, user: null }),
             );
 
-            navigate("/home");
+            navigate("/");
         } catch (err: any) {
             if (err.response) {
                 console.log(err.response);

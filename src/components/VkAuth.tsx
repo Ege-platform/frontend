@@ -18,7 +18,7 @@ function VKAuth(props: any) {
         async function getAccess() {
             const accessToken = await loginVkToken({ code: code! });
             dispatch(setCredentials({ accessToken: accessToken, user: null }));
-            navigate("/home");
+            navigate("/");
             console.log(`accessToken: ${accessToken}`);
         }
         getAccess();
