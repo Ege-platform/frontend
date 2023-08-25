@@ -2,24 +2,36 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../feature/user/authSlice";
-import { useLoginVkMutation } from "../feature/user/authApiSlice";
-import { get } from "video.js/dist/types/tech/middleware";
+import { useLoginVkTokenMutation } from "../feature/user/authApiSlice";
 
-function VKAuth(props: any) {
+function VKAuth() {
     const [code, setCode] = useState<string | null>(null);
-    const [loginVkToken] = useLoginVkMutation();
+    const [loginVkToken] = useLoginVkTokenMutation();
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const code = queryParams.get("code");
+
         setCode(code);
+
         async function getAccess() {
-            const accessToken = await loginVkToken({ code: code! });
-            dispatch(setCredentials({ accessToken: accessToken, user: null }));
+            console.log(code);
+            const data: any = await loginVkToken({ code: code! });
+            // if data doesn't contain accessToken, then redirect to auth page
+            if (!data.data.accessToken) {
+                navigate("/auth");
+                return;
+            }
+            dispatch(
+                setCredentials({
+                    accessToken: data.data.accessToken,
+                    user: null,
+                }),
+            );
             navigate("/");
-            console.log(`accessToken: ${accessToken}`);
         }
         getAccess();
     }, []);

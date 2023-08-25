@@ -12,17 +12,13 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import {
-    useLoginMutation,
-    useGetCurrentUserMutation,
-} from "../feature/user/authApiSlice";
-import { setCredentials, setUser } from "../feature/user/authSlice";
+import { useLoginMutation } from "../feature/user/authApiSlice";
+import { setCredentials } from "../feature/user/authSlice";
 
 export default function SignInForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [login, { isLoading }] = useLoginMutation();
-    const [getCurrentUser] = useGetCurrentUserMutation();
 
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");

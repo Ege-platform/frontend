@@ -1,21 +1,20 @@
 import { Container, Grid } from "@mui/material";
 import MapCard from "../components/MapCard";
-import { createTheme } from "@mui/material/styles";
-import { ThemeProvider } from "@emotion/react";
+
 import CssBaseline from "@mui/material/CssBaseline";
 import map from "../assets/map.svg";
 
 export default function HomePage() {
-    const HomePageTheme = createTheme({
-        palette: {
-            background: {
-                default: "#10062B",
-            },
-        },
-    });
+    // const HomePageTheme = createTheme({
+    //     palette: {
+    //         background: {
+    //             default: "#10062B",
+    //         },
+    //     },
+    // });
 
     return (
-        <ThemeProvider theme={HomePageTheme}>
+        <>
             <CssBaseline />
             <Container
                 //center container in the middle of the screen
@@ -66,6 +65,6 @@ export default function HomePage() {
                     </Grid>
                 </Grid>
             </Container>
-        </ThemeProvider>
+        </>
     );
 }

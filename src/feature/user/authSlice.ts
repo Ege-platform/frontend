@@ -6,7 +6,7 @@ type AuthState = {
 };
 
 type AuthData = {
-    accessToken: string;
+    accessToken: string | null;
     user: any;
 };
 
@@ -18,11 +18,13 @@ const authSlice = createSlice({
     },
     reducers: {
         setCredentials: (state: AuthState, action: PayloadAction<AuthData>) => {
-            console.log(action.payload);
+            // if (action.payload.accessToken === null) {
+            //     return;
+            // }
             state.token = action.payload.accessToken;
             state.user = action.payload.user;
-            console.log(state.token);
-            localStorage.setItem("token", state.token);
+
+            localStorage.setItem("token", state.token!);
         },
         setUser: (state: AuthState, action: PayloadAction<any>) => {
             state.user = action.payload;

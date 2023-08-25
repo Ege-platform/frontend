@@ -22,9 +22,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
         loginVkToken: builder.mutation({
             query: ({ code }) => ({
-                url: "/auth/vk/token",
+                url: "/auth/vk_handle",
                 method: "POST",
-                query: {
+                params: {
                     code: code,
                 },
             }),

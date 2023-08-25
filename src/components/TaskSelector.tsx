@@ -26,20 +26,56 @@ export default function TaskSelector(props: TaskSelectorProps) {
         backgroundColor = "#605DE3";
     }
 
-    function handleSetTask() {
+    function handleAddTask() {
         // create SelectedTask object
+        console.log(taskNumber, taskCount);
         const task: SelectedTask = {
             egeId: taskNumber,
-            count: taskCount,
-            subject: "",
+            count: taskCount + 1,
+            subject: "russian",
         };
+        setTaskCount(taskCount + 1);
         props.handleSetTask(task);
+    }
+
+    function handleRemoveTask() {
+        // create SelectedTask object
+        console.log(taskNumber, taskCount);
+        const task: SelectedTask = {
+            egeId: taskNumber,
+            count: taskCount - 1,
+            subject: "russian",
+        };
+        setTaskCount(taskCount - 1);
+        props.handleSetTask(task);
+    }
+
+    function handleChangeTaskCount(e: any) {
+        let task: SelectedTask = {
+            egeId: taskNumber,
+            count: 0,
+            subject: "russian",
+        };
+        if (e.target.value === "") {
+            setTaskCount(0);
+            props.handleSetTask(task);
+        } else {
+            try {
+                const value = parseInt(e.target.value);
+                task.count = value;
+                props.handleSetTask(task);
+                setTaskCount(value);
+            } catch (e) {
+                setTaskCount(0);
+                props.handleSetTask(task);
+            }
+        }
     }
 
     return (
         <Container
             sx={{
-                width: "800px",
+                width: 1000,
                 ml: 0,
             }}
         >
@@ -96,19 +132,12 @@ export default function TaskSelector(props: TaskSelectorProps) {
                         background: backgroundColor,
                         mr: "10px",
                     }}
-                    onClick={() => {
-                        if (taskCount === 0) {
-                            return;
-                        }
-                        setTaskCount(taskCount - 1);
-                        handleSetTask();
-                    }}
+                    onClick={handleRemoveTask}
                 >
                     -
                 </Button>
-                {/* make input width 40px */}
                 <OutlinedInput
-                    // type="number"
+                    type="number"
                     sx={{
                         width: "70px",
                         height: "50px",
@@ -116,17 +145,7 @@ export default function TaskSelector(props: TaskSelectorProps) {
                         alignContent: "center",
                     }}
                     value={taskCount}
-                    onChange={(e) => {
-                        if (e.target.value === "") {
-                            setTaskCount(0);
-                            return;
-                        }
-                        try {
-                            setTaskCount(parseInt(e.target.value));
-                        } catch (e) {
-                            setTaskCount(0);
-                        }
-                    }}
+                    onChange={handleChangeTaskCount}
                 />
                 <Button
                     variant="contained"
@@ -136,10 +155,7 @@ export default function TaskSelector(props: TaskSelectorProps) {
                         background: backgroundColor,
                         ml: "10px",
                     }}
-                    onClick={() => {
-                        setTaskCount(taskCount + 1);
-                        handleSetTask();
-                    }}
+                    onClick={handleAddTask}
                 >
                     +
                 </Button>

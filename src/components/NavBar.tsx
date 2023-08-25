@@ -26,6 +26,8 @@ import { useGetCurrentUserMutation } from "../feature/user/authApiSlice";
 import { useDispatch } from "react-redux";
 
 export default function NavBar() {
+    // get current path from router
+
     const navigate = useNavigate();
     const currentUser = useSelector(selectCurrentUser);
     const currentToken = useSelector(selectCurrentToken);
@@ -35,7 +37,7 @@ export default function NavBar() {
 
     const navLinks = [
         ["Вселенная", "/"],
-        ["Генератор заданий", "/task"],
+        ["Генератор заданий", "/exam", "/exam"],
         ["Активность", "/activity"],
     ];
 
@@ -43,43 +45,31 @@ export default function NavBar() {
     const [userCoins, setUserCoins] = useState(0);
 
     useEffect(() => {
-        let user = currentUser;
+        // let user = currentUser;
         async function fetchUser() {
             try {
-                const data = await getCurrentUser({}).unwrap();
-                console.log(`data:`, data);
-                setUserCoins(data.coins);
-                setUserExperience(data.experience);
-                if (currentToken == null || currentToken == undefined) {
-                    console.log(`currentToken is null`);
-                    return;
+                if (currentUser == null || currentUser == undefined) {
+                    const data = await getCurrentUser({}).unwrap();
+                    console.log(`data:`, data);
+                    dispatch(
+                        setCredentials({
+                            accessToken: currentToken,
+                            user: data,
+                        }),
+                    );
+                    setUserCoins(currentUser.coins);
+                    setUserExperience(currentUser.experience);
+                } else {
+                    console.log(`currentUser:`, currentUser);
+                    setUserCoins(currentUser.coins);
+                    setUserExperience(currentUser.experience);
                 }
-                dispatch(
-                    setCredentials({
-                        accessToken: currentToken,
-                        user: data,
-                    }),
-                );
             } catch (e) {
                 console.log("error", e);
             }
         }
-        if (user != null) {
-            setUserExperience(user.experience);
-            setUserCoins(user.coins);
-        } else {
-            fetchUser();
-            // console.log new store
-            user = currentUser;
-            console.log("fetch user", user);
-            if (user == null) {
-                console.log("user is null");
-                return;
-            }
-            setUserExperience(user.experience);
-            setUserCoins(user.coins);
-        }
-    }, []);
+        fetchUser();
+    }, [userExperience, userCoins]);
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -219,7 +209,7 @@ export default function NavBar() {
                                 }}
                                 onClick={() => {
                                     dispatch(logoutUser());
-                                    navigate("/");
+                                    navigate("/auth");
                                 }}
                             >
                                 Выйти

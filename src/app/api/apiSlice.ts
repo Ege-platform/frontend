@@ -4,11 +4,17 @@ const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:9999",
     // add type to getState from redux store
     prepareHeaders: (headers, { getState }) => {
+        // @ts-ignore
         const token = getState().auth.token;
-
-        if (token !== undefined) {
+        console.log(`build headers ${token}`);
+        if (token === null) {
+            // get token from local storage
+            const localToken = localStorage.getItem("token");
+            headers.set("authorization", `Bearer ${localToken}`);
+        } else {
             headers.set("authorization", `Bearer ${token}`);
         }
+
         return headers;
     },
 });

@@ -1,11 +1,11 @@
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import "./App.css";
 import NotFoundPage from "./pages/NotFoundPage";
-import NavBar from "./components/NavBar";
+
 import HomePage from "./pages/HomePage";
 import TestActivityPage from "./pages/TestActivityPage";
-import NewMapPage from "./pages/NewMapPage";
+import TaskGenerator from "./pages/TaskGenerator";
 import AuthPage from "./pages/AuthPage";
 import { Route, Routes } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
@@ -13,6 +13,7 @@ import "./App.css";
 import RequireAuth from "./pages/RequireAuth";
 import VKAuth from "./components/VkAuth";
 import { theme } from "./theme";
+import ExamPage from "./pages/ExamPage";
 
 function App() {
     // create 4 colors for task selector
@@ -27,8 +28,10 @@ function App() {
 
                 {/* protected routes */}
                 <Route element={<RequireAuth />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="/task" element={<NewMapPage />} />
+                    <Route path="/" element={<HomePage />} />
+
+                    <Route path="/exam" element={<TaskGenerator />} />
+                    <Route path="/exam/tasks" element={<ExamPage />} />
                     <Route path="/activity" element={<TestActivityPage />} />
                 </Route>
 

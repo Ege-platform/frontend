@@ -9,30 +9,29 @@ import TelegramLoginButton from "react-telegram-login";
 import VkIcon from "../icons/vk";
 import TelegramIcon from "../icons/telegram";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
 import {
-    useGetCurrentUserMutation,
+    // useGetCurrentUserMutation,
     useLoginVkMutation,
 } from "../feature/user/authApiSlice";
-import { setUser, setCredentials } from "../feature/user/authSlice";
-import { WindowOutlined } from "@mui/icons-material";
+// import { setCredentials } from "../feature/user/authSlice";
 
 export default function AuthPage() {
     const theme = useTheme();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [getCurrentUser] = useGetCurrentUserMutation();
+    // const navigate = useNavigate();
+    // const dispatch = useDispatch();
+    // const [getCurrentUser] = useGetCurrentUserMutation();
     const [loginVk] = useLoginVkMutation();
 
     useEffect(() => {
         // try to get token from local storage
-        const token = localStorage.getItem("token");
+        const token: string | null = localStorage.getItem("token");
         console.log(`token from local storage: ${token}`);
-        if (token != null) {
-            dispatch(setCredentials({ accessToken: token, user: null }));
-            navigate("/");
-        }
+        // if (token != null) {
+        //     dispatch(setCredentials({ accessToken: token, user: null }));
+        //     navigate("/");
+        // }
     }, []);
 
     const [isSignIn, setIsSignIn] = useState<boolean>(true);

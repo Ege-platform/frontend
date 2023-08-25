@@ -1,33 +1,34 @@
 import { useLocation, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../feature/user/authSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../feature/user/authSlice";
 
 export default function RequireAuth() {
-    const dispatch = useDispatch();
+    // get current path from router
     const location = useLocation();
-    const token = useSelector(selectCurrentToken);
+    const currentToken = useSelector(selectCurrentToken);
+    const dispatch = useDispatch();
+    const [localToken, setLocalToken] = useState<string | null>(
+        localStorage.getItem("token"),
+    );
 
     useEffect(() => {
-        console.log(`RequireAuth token: `, token);
-        if (token == null) {
-            // try to get token from local storage
-            const token = localStorage.getItem("token");
-            console.log(`token from local storage: ${token}`);
-            if (token != null) {
-                dispatch(setCredentials({ accessToken: token, user: null }));
-            } else {
-                console.log(`RequireAuth: token is null`);
-            }
+        // try to get token from local storage
+        console.log(location.pathname);
+        console.log(`token from local storage: ${localToken}`);
+        console.log(`token from redux: ${currentToken}`);
+        if (localToken != null) {
+            dispatch(setCredentials({ accessToken: localToken, user: null }));
         }
-    }, [token]);
+    }, [currentToken]);
 
-    return token ? (
+    return localToken != null ? (
         <NavBar />
     ) : (
-        <Navigate to="/auth" state={{ from: location }} />
+        // <Navigate to={location.pathname} />
+        <Navigate to="/auth" />
     );
 }

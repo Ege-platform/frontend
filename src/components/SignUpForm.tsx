@@ -14,19 +14,14 @@ import CopyrightComponent from "../Copyright";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { setCredentials, setUser } from "../feature/user/authSlice";
-import {
-    useRegisterMutation,
-    useGetCurrentUserMutation,
-} from "../feature/user/authApiSlice";
-import { store } from "../app/store";
-// import { }
+import { setCredentials } from "../feature/user/authSlice";
+import { useRegisterMutation } from "../feature/user/authApiSlice";
 
 export default function SignUpForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [register, { isLoading }] = useRegisterMutation();
-    const [getCurrentUser] = useGetCurrentUserMutation();
+    const [register /*{ isLoading }*/] = useRegisterMutation();
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
