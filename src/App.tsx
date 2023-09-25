@@ -1,44 +1,22 @@
-import { ThemeProvider } from "@mui/material/styles";
-
-import "./App.css";
-import NotFoundPage from "./pages/NotFoundPage";
-
-import HomePage from "./pages/HomePage";
-import TestActivityPage from "./pages/TestActivityPage";
-import TaskGenerator from "./pages/TaskGenerator";
-import AuthPage from "./pages/AuthPage";
+import AuthPage from "./pages/auth.tsx";
+import HomePage from "./pages/homePage.tsx";
+import TaskPage from "./pages/taskPage.tsx";
+import RequireAuth from "./components/RequireAuth.tsx";
 import { Route, Routes } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
-import "./App.css";
-import RequireAuth from "./pages/RequireAuth";
-import VKAuth from "./components/VkAuth";
-import { theme } from "./theme";
-import ExamPage from "./pages/ExamPage";
+import VideoPage from "./pages/videoPage.tsx";
 
 function App() {
-    // create 4 colors for task selector
-
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Routes>
-                {/* public routes */}
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/auth/vk" element={<VKAuth />} />
+        <Routes>
+            <Route path="/auth" element={<AuthPage />} />
 
-                {/* protected routes */}
-                <Route element={<RequireAuth />}>
-                    <Route path="/" element={<HomePage />} />
-
-                    <Route path="/exam" element={<TaskGenerator />} />
-                    <Route path="/exam/tasks" element={<ExamPage />} />
-                    <Route path="/activity" element={<TestActivityPage />} />
-                </Route>
-
-                {/* 404 */}
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-        </ThemeProvider>
+            {/* protected routes  */}
+            <Route element={<RequireAuth />}>
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/task" element={<TaskPage />} />
+                <Route path="/video/" element={<VideoPage />} />
+            </Route>
+        </Routes>
     );
 }
 

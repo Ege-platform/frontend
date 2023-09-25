@@ -1,238 +1,122 @@
-import { useState, useEffect } from "react";
+import Logo from "../assets/logo.svg";
+import Avatar from "../assets/avatar.svg";
+import Coin from "../assets/coin.svg";
+import { User } from "../types";
+import { matchRoutes, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { api_host } from "../api";
+import { Outlet } from "react-router-dom";
 
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Menu from "@mui/material/Menu";
-import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
-import CircularProgressWithLabel from "./CircularProgressWithLabel";
-import { Stack } from "@mui/material";
-import AdbIcon from "@mui/icons-material/Adb";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import {
-    selectCurrentUser,
-    setCredentials,
-    selectCurrentToken,
-    logoutUser,
-} from "../feature/user/authSlice";
-import { useSelector } from "react-redux";
-import { useGetCurrentUserMutation } from "../feature/user/authApiSlice";
-import { useDispatch } from "react-redux";
+const pages = [
+    {
+        title: "Вселенная",
+        pages: ["/home"],
+    },
+    {
+        title: "Генератор заданий",
+        pages: ["/task"],
+    },
+    {
+        title: "Поединок",
+        pages: ["/battle"],
+    },
+    {
+        title: "Магазин",
+        pages: ["/shop"],
+    },
+    {
+        title: "Библиотека",
+        pages: ["/lib"],
+    },
+    {
+        title: "Форум",
+        pages: ["/forum"],
+    },
+    {
+        title: "Помощь",
+        pages: ["/help"],
+    },
+];
 
 export default function NavBar() {
-    // get current path from router
+    const [user, setUser] = useState<User | null>(null);
 
-    const navigate = useNavigate();
-    const currentUser = useSelector(selectCurrentUser);
-    const currentToken = useSelector(selectCurrentToken);
-    const [getCurrentUser] = useGetCurrentUserMutation();
-
-    const dispatch = useDispatch();
-
-    const navLinks = [
-        ["Вселенная", "/"],
-        ["Генератор заданий", "/exam", "/exam"],
-        ["Активность", "/activity"],
-    ];
-
-    const [userExperience, setUserExperience] = useState(0);
-    const [userCoins, setUserCoins] = useState(0);
-
+    const location = useLocation();
     useEffect(() => {
-        // let user = currentUser;
-        async function fetchUser() {
-            try {
-                if (currentUser == null || currentUser == undefined) {
-                    const data = await getCurrentUser({}).unwrap();
-                    console.log(`data:`, data);
-                    dispatch(
-                        setCredentials({
-                            accessToken: currentToken,
-                            user: data,
-                        }),
-                    );
-                    setUserCoins(currentUser.coins);
-                    setUserExperience(currentUser.experience);
-                } else {
-                    console.log(`currentUser:`, currentUser);
-                    setUserCoins(currentUser.coins);
-                    setUserExperience(currentUser.experience);
-                }
-            } catch (e) {
-                console.log("error", e);
-            }
+        async function fetch() {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            };
+            axios
+                .get(api_host + "/api/v1/users/me", config)
+                .then((response) => {
+                    // set affected fields to loading state
+                    const data = response.data;
+                    setUser(data);
+                })
+                .catch((error) => {
+                    console.log("error", error);
+                })
+                .finally(() => {
+                    // console.log(user);
+                });
         }
-        fetchUser();
-    }, [userExperience, userCoins]);
-
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
+        fetch();
+    }, []);
 
     return (
-        // make AppBar fixed and add some styles such as background color white
         <>
-            <AppBar position="static" color="inherit">
-                <Container maxWidth="xl" sx={{}}>
-                    <Toolbar disableGutters>
-                        <AdbIcon
-                            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                        />
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            href="/"
-                            sx={{
-                                mr: 2,
-                                display: { xs: "none", md: "flex" },
-                                fontFamily: "monospace",
-                                fontWeight: 700,
-                                letterSpacing: ".3rem",
-                                color: "inherit",
-                                textDecoration: "none",
-                            }}
-                        >
-                            LOGO
-                        </Typography>
+            <header className="border-b-4 border-blue-100 drop-shadow-lg min-w-full py-3 px-8 rounded-b-lg">
+                <div className="flex flex-row justify-between">
+                    <div className="flex flex-row">
+                        <img src={Logo} className="h-10 w-10" />
 
-                        <Box
-                            sx={{
-                                flexGrow: 1,
-                                display: { xs: "flex", md: "none" },
-                            }}
-                        >
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleOpenNavMenu}
-                                color="inherit"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "left",
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "left",
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: { xs: "block", md: "none" },
-                                }}
-                            ></Menu>
-                        </Box>
-                        <AdbIcon
-                            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+                        {pages.map((item) => {
+                            var linkClass = "mx-8 font-3xl my-2";
+                            if (!item.pages.includes(location.pathname)) {
+                                linkClass += " text-gray-400";
+                            }
+                            return (
+                                <a
+                                    key={item.title}
+                                    href={item.pages[0]}
+                                    className={linkClass}
+                                >
+                                    {item.title}
+                                </a>
+                            );
+                        })}
+                    </div>
+                    <div className="flex flex-row justify-center">
+                        <img
+                            src={Avatar}
+                            className="h-10 w-10 bg-gray-400 rounded-lg mr-3"
                         />
-                        <Typography
-                            variant="h5"
-                            noWrap
-                            component="a"
-                            href=""
-                            sx={{
-                                mr: 2,
-                                display: { xs: "flex", md: "none" },
-                                flexGrow: 1,
-                                fontFamily: "monospace",
-                                fontWeight: 700,
-                                letterSpacing: ".3rem",
-                                color: "inherit",
-                                textDecoration: "none",
-                            }}
-                        >
-                            LOGO
-                        </Typography>
-                        <Box
-                            sx={{
-                                flexGrow: 1,
-                                display: { xs: "none", md: "flex" },
-                            }}
-                        >
-                            <Stack direction={"row"}>
-                                {navLinks.map(([name, link]) => {
-                                    return (
-                                        <NavLink
-                                            to={link}
-                                            key={name}
-                                            style={({ isActive }) => {
-                                                return isActive
-                                                    ? { color: "black" }
-                                                    : { color: "gray" };
-                                            }}
-                                        >
-                                            <Button
-                                                sx={{
-                                                    color: "inherit",
-                                                    textDecoration: "none",
-                                                }}
-                                                onClick={() =>
-                                                    navigate(link[1])
-                                                }
-                                            >
-                                                {name}
-                                            </Button>
-                                        </NavLink>
-                                    );
-                                })}
-                            </Stack>
-                        </Box>
-                        <Box sx={{ flexGrow: 1 }}>
-                            {/* logout button */}
-                            <Button
-                                variant="outlined"
-                                sx={{
-                                    color: "inherit",
-                                    borderColor: "inherit",
-                                    textDecoration: "none",
-                                }}
-                                onClick={() => {
-                                    dispatch(logoutUser());
-                                    navigate("/auth");
-                                }}
+                        <div className="flex flex-col mx-3">
+                            <p
+                                className={
+                                    !user ? "text-xs animate-pulse" : "text-xs"
+                                }
                             >
-                                Выйти
-                            </Button>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title="Open settings">
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="/static/images/avatar/2.jpg"
-                                />
-                            </Tooltip>
-                        </Box>
-                        <Box sx={{ flexGrow: 0 }}>
-                            <Typography> {userCoins}</Typography>
-                        </Box>
-                        <Box sx={{ flexGrow: 0 }}>
-                            <CircularProgressWithLabel value={userExperience} />
-                        </Box>
-                    </Toolbar>
-                </Container>
-            </AppBar>
+                                {user ? user.username : "Ник"}
+                            </p>
+                            <p className="text-xs text-gray-400">Статус</p>
+                        </div>
+                        <div className="h-10 w-10 mx-3 border-2  border-indigo-500 rounded-lg flex flex-row min-w-max">
+                            <img
+                                className=" rounded-lg bg-indigo-200"
+                                src={Coin}
+                            />
+                            <p className="py-1 mx-1">
+                                {user ? user.coins : "0"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </header>
             <Outlet />
         </>
     );
