@@ -1,9 +1,11 @@
+import { useParams, useNavigate } from "react-router-dom";
 import H5pVideo from "../components/H5pVideo";
 
 export default function VideoPage() {
-    return (
-        <>
-            <h1>Video page</h1>
+    let { videoId } = useParams();
+    let navigate = useNavigate();
+    if (videoId) {
+        return (
             <div
                 className="w-full h-screen flex flex-col justify-center items-center"
                 style={{
@@ -11,8 +13,10 @@ export default function VideoPage() {
                     backgroundImage: "url(/background.svg)",
                 }}
             >
-                <H5pVideo />
+                <H5pVideo taskId={videoId} />
             </div>
-        </>
-    );
+        );
+    }else{
+        navigate("")
+    }
 }
