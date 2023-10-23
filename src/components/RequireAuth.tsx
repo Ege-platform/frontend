@@ -2,7 +2,6 @@ import { Navigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 
-import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
 export default function RequireAuth() {
@@ -17,5 +16,5 @@ export default function RequireAuth() {
         // console.log(`token from local storage: ${localToken}`);
     }, []);
 
-    return localToken != null ? <NavBar /> : <Navigate to="/auth" />;
+    return localToken != null ? <NavBar /> : <Navigate to="/" />;
 }

@@ -21,10 +21,10 @@ const VideoPlayer = (props: { taskId: string }) => {
             }
             const h5p = await new H5P(el, options);
             console.log(h5p);
-            h5p.externalDispatcher.on("xAPI", (event) => {
-                //do something useful with the event
-                console.log("xAPI event: ", event);
-            });
+            // h5p.externalDispatcher.on("xAPI", (event) => {
+            //     //do something useful with the event
+            //     console.log("xAPI event: ", event);
+            // });
         }
         myAwesomePlayer();
         // const h5p = new H5P(el, options);

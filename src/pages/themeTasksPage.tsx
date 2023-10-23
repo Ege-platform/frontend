@@ -7,22 +7,22 @@ import punctuation19enabled from "../assets/punctuation19enabled.svg";
 import punctuation20enabled from "../assets/punctuation20enabled.svg";
 import punctuation21enabled from "../assets/punctuation21enabled.svg";
 
-type Task = {
-    number: number; // номер задания
-    id: string; // что-то типо russian-20-4
-};
+// type Task = {
+//     number: number; // номер задания
+//     id: string; // что-то типо russian-20-4
+// };
 
-interface HomePageProps {
-    tasks: Array<Task>;
-}
+// interface HomePageProps {
+//     tasks: Array<Task>;
+// }
 
-export default function ThemeTaskPage(props: HomePageProps) {
+export default function ThemeTaskPage() {
     // const punctuation =
 
     return (
         <>
             <div
-                className="w-full h-screen flex flex-col justify-center items-center"
+                className="w-full h-screen flex flex-col justify-center items-center "
                 style={{
                     background: "#10062B",
                     backgroundImage: "url(/background.svg)",

@@ -10,16 +10,16 @@ function App() {
 
     // http://larek.itatmisis.ru:9999/static/h5p/russian-18-3/h5p.json
 
-    const tasks = [
-        {
-            number: 1,
-            id: "russian-20-4",
-        },
-        {
-            number: 2,
-            id: "russian-18-3",
-        },
-    ];
+    // const tasks = [
+    //     {
+    //         number: 1,
+    //         id: "russian-20-4",
+    //     },
+    //     {
+    //         number: 2,
+    //         id: "russian-18-3",
+    //     },
+    // ];
 
     return (
         <Routes>
@@ -27,7 +27,7 @@ function App() {
 
             {/* protected routes  */}
             <Route element={<RequireAuth />}>
-                <Route path="/home" element={<ThemeTaskPage tasks={tasks} />} />
+                <Route path="/home" element={<ThemeTaskPage />} />
                 <Route path="/task" element={<TaskPage />} />
                 <Route path="/video/:videoId" element={<VideoPage />} />
             </Route>

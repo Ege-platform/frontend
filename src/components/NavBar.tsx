@@ -2,7 +2,7 @@ import Logo from "../assets/logo.svg";
 import Avatar from "../assets/avatar.svg";
 import Coin from "../assets/coin.svg";
 import { User } from "../types";
-import { matchRoutes, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { api_host } from "../api";
@@ -26,7 +26,7 @@ const pages = [
         pages: ["/shop"],
     },
     {
-        title: "Библиотека",
+        title: "Теория",
         pages: ["/lib"],
     },
     {
