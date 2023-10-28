@@ -1,7 +1,9 @@
-.auth-content-row {
+/* @import "antd/dist/antd.css"; */
+
+/* .auth-content-row {
     flex: auto;
     flex-direction: row-reverse;
-}
+} */
 
 .content {
     background-color: rgb(0 0 0 / 65%);
@@ -43,16 +45,30 @@
 }
 
 .buttonBar {
-    padding-right: 10px;
+    display: flex;
+    max-width: fit-content;
 }
 
-/* 
-.ant-btn-primary {
-    background-color: #605de3;
+.navBarMobile {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
 }
-.ant-btn-primary:hover {
-    background-color: #605de3;
+
+@media screen and (min-width: 500px) {
+    .navBarMobile {
+        display: none;
+    }
 }
-.ant-btn-primary:active {
-    background-color: #605de3;
-} */
+
+/* hide navbar on small displays */
+@media screen and (max-width: 500px) {
+    .navBar {
+        display: none;
+    }
+}
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/

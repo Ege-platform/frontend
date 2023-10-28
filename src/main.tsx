@@ -1,12 +1,14 @@
 import { ConfigProvider } from "antd";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, Routes, Route, BrowserRouter } from "react-router-dom";
-import { router } from "./router";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+
 import Login from "./pages/login";
 import Register from "./pages/register";
-import "./index.css";
+import TestNav from "./components/NavBar";
 import NavBar from "./pages/navBar";
+
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -30,7 +32,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={<NavBar />}>
-                        <Route path="me" element={<div>Profile</div>} />
+                        <Route path="me" element={<div></div>} />
+                    </Route>
+                    <Route path="/test" element={<TestNav />}>
+                        <Route path="/test" element={<div>Home</div>} />
                     </Route>
                 </Routes>
             </BrowserRouter>
