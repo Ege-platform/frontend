@@ -9,6 +9,7 @@ import TestNav from "./components/NavBar";
 import NavBar from "./pages/navBar";
 
 import "./index.css";
+import TaskPage from "./pages/appointment";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -35,7 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <Route path="me" element={<div></div>} />
                     </Route>
                     <Route path="/test" element={<TestNav />}>
-                        <Route path="/test" element={<div>Home</div>} />
+                        <Route path="/test" element={<TaskPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

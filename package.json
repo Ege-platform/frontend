@@ -12,6 +12,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.2.6",
         "@lumieducation/h5p-react": "^9.3.2",
+        "@lumieducation/h5p-server": "^9.3.2",
         "@lumieducation/h5p-webcomponents": "^9.3.2",
         "antd": "^5.10.2",
         "antd-phone-input": "^0.2.4",
