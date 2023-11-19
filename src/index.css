@@ -59,6 +59,9 @@
     .navBarMobile {
         display: none;
     }
+    .buttonBar{
+        display: none;
+    }
 }
 
 /* hide navbar on small displays */
@@ -68,7 +71,75 @@
     }
 }
 
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+
+.task-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 77px;
+    height: 77px;
+    border-radius: 80px;
+    box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.25);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.00) 100%);
+}
+
+.task-button-inner {
+    width: 61px;
+    height: 61px;
+    color: #FFF;
+    font-family: Droid Sans;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    background: radial-gradient(circle at center, #9c9c9c 5%,  #10062B 70%);
+    border: 3px solid #10062B;
+    border-radius: 50%;
+}
+.task-button:hover {
+    /* Changes to apply on hover */
+    background: radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.10) 100%);
+    box-shadow: 0px 0px 6px 1px rgba(255, 255, 255, 0.35);
+    cursor: pointer; /* Changes cursor to indicate it's clickable */
+}
+
+.task-button:hover .task-button-inner {
+    background: radial-gradient(circle at center, #a8a8a8 5%, #20064B 70%);
+    border: 3px solid #20064B;
+}
+
+.task-button-disabled {
+    width: 77px;
+    height: 77px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5; /* Makes the button look faded */
+    cursor: not-allowed; /* Changes the cursor to indicate the button is not clickable */
+    box-shadow: none; /* Optional: Removes the shadow to make it look flat and inactive */
+}
+
+.task-button-disabled .task-button-inner {
+    width: 61px;
+    height: 61px;
+    color: #FFF;
+    font-family: Droid Sans;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #bcbcbc 5%, #4a4a4a 70%); /* Lighter colors for a disabled look */
+    border: 3px solid #4a4a4a; /* Adjust the border color to match the disabled theme */
+}
+

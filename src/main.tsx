@@ -6,10 +6,11 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import TestNav from "./components/NavBar";
-import NavBar from "./pages/navBar";
+import Map from "./pages/mapPage";
+import Test from "./pages/test";
 
 import "./index.css";
-import TaskPage from "./pages/appointment";
+import TaskPage from "./pages/taskPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -30,13 +31,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         >
             <BrowserRouter>
                 <Routes>
+                    <Route path="/test" element={<Test />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/" element={<NavBar />}>
+                    <Route path="/" element={<TestNav />}>
+                        <Route path="/" element={<Map />} />
                         <Route path="me" element={<div></div>} />
-                    </Route>
-                    <Route path="/test" element={<TestNav />}>
-                        <Route path="/test" element={<TaskPage />} />
+
+                        <Route path="task" element={<TaskPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

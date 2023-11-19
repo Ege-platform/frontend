@@ -19,17 +19,13 @@ const headerStyle: React.CSSProperties = {
 };
 
 const contentStyle: React.CSSProperties = {
-    textAlign: "center",
     minHeight: "100%",
-
-    color: "#fff",
-    backgroundColor: "#108ee9",
 };
 
 const footerStyle: React.CSSProperties = {
     textAlign: "center",
     color: "#fff",
-    backgroundColor: "#7dbcea",
+    backgroundColor: "#10062B",
 };
 
 const profileDropDownItems = [
