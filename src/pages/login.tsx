@@ -2,13 +2,17 @@ import { useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import { Alert, Button, Col, Input, Row, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { rootStore } from "../stores/RootStore";
 
 import vk from "../assets/vk.svg";
 import logo from "../assets/logo.svg";
 import { AuthApiServiceInstance } from "../api/AuthApiService";
+import { UserApiServiceInstance } from "../api/UserApiService";
 
-export default function Login() {
+const LoginPage = observer(() => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState<boolean>(false);
@@ -25,10 +29,20 @@ export default function Login() {
                 username: username,
                 password: password,
             })
+                .then((res) => {
+                    UserApiServiceInstance.getUserData().then((userData) => {
+                        console.log(userData);
+                        rootStore.setUser(userData);
+                        navigate("/map");
+                        return;
+                    });
+                })
                 .catch((err) => {
                     setErr("Введён неверный логин или пароль");
                 })
-                .finally(() => setLoading(false));
+                .finally(() => {
+                    setLoading(false);
+                });
         };
         fetchToken();
     };
@@ -108,7 +122,9 @@ export default function Login() {
             </Row>
         </Content>
     );
-}
+});
+
+export default LoginPage;
 //    <div className="bg-background">
 //        {/* login container  */}
 //        <div className="min-w-min grid px-5 gap-4 mt-5 bg-white h-min">

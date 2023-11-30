@@ -5,8 +5,8 @@ import {
 } from "@ant-design/icons";
 import { Drawer, Layout, Menu, Space, Avatar, Dropdown } from "antd";
 import { MenuItemType } from "antd/es/menu/hooks/useItems";
-import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, Link, useLocation } from "react-router-dom";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -41,8 +41,8 @@ const profileDropDownItems = [
 
 const navItems = [
     {
-        key: "home",
-        label: <Link to="/">Вселенная</Link>,
+        key: "map",
+        label: <Link to="/map">Вселенная</Link>,
     },
     {
         key: "task",
@@ -50,24 +50,39 @@ const navItems = [
     },
     {
         key: "library",
-        label: <Link to="/lib">Задачи</Link>,
+        label: <Link to="/lib">Шпаргалки</Link>,
     },
 ];
 
-function AppMenu({ isInline = false }) {
+type AppMenuProps = {
+    isInline?: boolean;
+    pathName?: string;
+    closeMenu: () => void;
+};
+
+function AppMenu({ isInline = false, pathName = "", closeMenu }: AppMenuProps) {
     return (
-        <>
-            <Menu
-                style={{ border: "none" }}
-                items={navItems}
-                mode={isInline ? "inline" : "horizontal"}
-            />
-        </>
+        <Menu
+            style={{ border: "none" }}
+            items={navItems}
+            selectedKeys={[pathName]}
+            mode={isInline ? "inline" : "horizontal"}
+            onClick={(e) => {
+                closeMenu();
+            }}
+        />
     );
 }
 
 export default function TestNav() {
+    const location = useLocation();
     const [openMenu, setOpenMenu] = useState(false);
+    // const path = location.pathname;
+    const [path, setPath] = useState("map");
+
+    useEffect(() => {
+        setPath(location.pathname);
+    }, [location]);
 
     return (
         <Layout style={{ width: "100%", height: "100%" }}>
@@ -100,7 +115,12 @@ export default function TestNav() {
                     </div>
                 </div>
                 <div className="navBar">
-                    <AppMenu />
+                    <AppMenu
+                        pathName={path}
+                        closeMenu={() => {
+                            setOpenMenu(false);
+                        }}
+                    />
                     <div className="buttonBar">
                         <Space size={"middle"}>
                             <BellOutlined
@@ -133,7 +153,13 @@ export default function TestNav() {
                         border: "none",
                     }}
                 >
-                    <AppMenu isInline />
+                    <AppMenu
+                        isInline
+                        pathName={path}
+                        closeMenu={() => {
+                            setOpenMenu(false);
+                        }}
+                    />
                 </Drawer>
             </Header>
             <Content style={contentStyle}>

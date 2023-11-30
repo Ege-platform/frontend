@@ -1,15 +1,40 @@
-import { Card, Typography } from "antd";
+import { Button } from "antd";
 
 interface TaskButtonProps {
     taskNumber?: number;
     color?: string;
-    active?: boolean;
+    disabled?: boolean;
+}
+
+export function TestTaskButton({
+    taskNumber,
+    color = "#7CB518",
+    disabled = false,
+}: TaskButtonProps) {
+    return (
+        <Button
+            type="primary"
+            style={{
+                color: "#fff",
+                fontSize: "32px",
+                fontWeight: "bold",
+                background: `radial-gradient(circle at center,${color} , #10062B)`,
+                height: "77px",
+                width: "77px",
+                borderRadius: "140px",
+                border: `3px solid ${color}`,
+            }}
+            disabled={disabled}
+        >
+            {taskNumber}
+        </Button>
+    );
 }
 
 export function TaskButton({
     taskNumber,
     color = "#7CB518",
-    active = true,
+    disabled: active = true,
 }: TaskButtonProps) {
     return (
         <div className={active ? "task-button" : "task-button-disabled"}>
@@ -42,23 +67,41 @@ interface TaskInfoProps {
     taskNumber: number;
     color?: string;
     text: string;
+    disabled?: boolean;
 }
 
 export function TaskInfo({
     taskNumber,
     color = "#7CB518",
     text,
+    disabled = false,
 }: TaskInfoProps) {
+    // #7CB5181F
     return (
-        <Card
+        <div
             style={{
-                border: `3px solid ${color}`,
-                // backgroundColor: `${color}`,
-                // opacity: "12%",
-                color: "#fff",
+                opacity: disabled ? 0 : 1,
+                border: `2px solid ${color}`,
+                backgroundColor: `${color}1F`,
+                borderRadius: "10px",
+                // color: "#fff",
+                maxWidth: "200px",
             }}
         >
-            <Typography>{text}</Typography>
-        </Card>
+            <div
+                style={{
+                    // backgroundColor: `${color}`,
+                    width: "150px",
+                    color: "#fff",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    padding: "16px",
+                }}
+            >
+                <p style={{ maxHeight: "50px", whiteSpace: "pre-wrap" }}>
+                    {text}
+                </p>
+            </div>
+        </div>
     );
 }

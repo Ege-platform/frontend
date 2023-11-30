@@ -12,7 +12,10 @@ class AuthApiService {
         );
 
         if (response.status == 200) {
-            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem(
+                "token",
+                JSON.stringify(response.data.accessToken),
+            );
         }
 
         return response.data;
@@ -28,6 +31,11 @@ class AuthApiService {
     public async getVkLink(): Promise<string> {
         const response = await axios.post<string>(API_URL + "/auth/vk");
         return response.data;
+    }
+
+    public async loggedIn(): Promise<boolean> {
+        const response = await axios.get(API_URL + "/users/me");
+        return response.status === 200;
     }
     // public async authVkHandle(code: string): Promise
 }

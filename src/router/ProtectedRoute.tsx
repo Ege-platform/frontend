@@ -1,15 +1,25 @@
+import { rootStore } from "../stores/RootStore";
+import { observer } from "mobx-react-lite";
 import { Navigate } from "react-router-dom";
+import TestNav from "../components/NavBar";
+import { UserApiServiceInstance } from "../api/UserApiService";
+import { useEffect, useState } from "react";
 
-type Props = {
-    isSignedIn: boolean;
-    children: React.ReactNode;
-};
+const ProtectedRoute = observer(() => {
+    const [component, setComponent] = useState<JSX.Element | null>(null);
 
-function ProtectedRoute({ isSignedIn, children }: Props): JSX.Element {
-    if (!isSignedIn) {
-        return <Navigate to="/login" replace />;
-    }
-    return children as JSX.Element;
-}
+    useEffect(() => {
+        UserApiServiceInstance.getUserData()
+            .then((userData) => {
+                rootStore.setUser(userData);
+                setComponent(<TestNav />);
+            })
+            .catch(() => {
+                setComponent(<Navigate to="/login" replace />);
+            });
+    }, []);
+
+    return component;
+});
 
 export default ProtectedRoute;

@@ -3,6 +3,7 @@ import type {
     IPlayerModel,
     IContentMetadata,
 } from "@lumieducation/h5p-server";
+import axios from "axios";
 import { CONTENT_URL } from "../config";
 
 export interface IContentListEntry {
@@ -20,7 +21,7 @@ export interface IContentService {
         contextId?: string,
         asUserId?: string,
         readOnlyState?: boolean,
-    ): Promise<IPlayerModel>;
+    ): Promise<any>;
     list(): Promise<IContentListEntry[]>;
     save(
         contentId: string,
@@ -140,6 +141,47 @@ export class ContentService implements IContentService {
         }
         return res.json();
     };
+
+    // getPlay = async (
+    //     contentId: string,
+    //     contextId?: string,
+    //     asUserId?: string,
+    //     readOnlyState?: boolean,
+    // ): Promise<any> => {
+    //     console.log(
+    //         `ContentService: Getting information to play ${contentId}${
+    //             contextId ? `, contextId ${contextId}` : ""
+    //         }${asUserId ? `, asUserId ${asUserId}` : ""}${
+    //             readOnlyState !== undefined
+    //                 ? `, readOnlyState ${readOnlyState}`
+    //                 : ""
+    //         }...`,
+    //     );
+
+    //     const query = new URLSearchParams();
+    //     if (contextId) {
+    //         query.append("contextId", contextId);
+    //     }
+    //     if (asUserId) {
+    //         query.append("asUserId", asUserId);
+    //     }
+    //     if (readOnlyState === true) {
+    //         query.append("readOnlyState", "yes");
+    //     }
+
+    //     const queryString = query.toString();
+
+    //     const res = await axios.get(
+    //         `${this.baseUrl}/play/${contentId}${
+    //             queryString ? `?${queryString}` : ""
+    //         }`,
+    //         { responseType: "document" },
+    //     );
+    //     // if (!res || !res.ok) {
+    //     //     throw new Error(`${res.status} ${res.statusText}`);
+    //     // }
+    //     return res;
+    // };
 
     list = async (): Promise<IContentListEntry[]> => {
         console.log(this.csrfToken);
