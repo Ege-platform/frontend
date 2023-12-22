@@ -1,4 +1,4 @@
-import { Card, Progress } from "antd";
+import { Progress } from "antd";
 import Star from "../assets/star.svg";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import { UserApiServiceInstance } from "../api/UserApiService";
 
 import colors from "../stores/index";
 import { IActivitiesProgress } from "../api/models/IActivitiesProgress";
-
 
 interface ProgressCardData {
     title: string;
@@ -59,7 +58,7 @@ const processActivitiesProgress = (
 
 const generateRandomProperties = () => {
     const x = Math.floor(Math.random() * window.innerWidth); // replace 1000 with the actual width of your map
-    const y = Math.floor(Math.random() * 1000); // replace 1000 with the actual height of your map
+    const y = Math.floor(Math.random() * 1500); // replace 1000 with the actual height of your map
     const opacity = Math.random(); // generates a random number between 0 (fully transparent) and 1 (fully opaque)
     const size = Math.floor(Math.random() * (8 - 2 + 1)) + 2; // generates a random number between 2 and 8
     return { x, y, opacity, size };
@@ -84,15 +83,16 @@ const ProgressCard = ({
         <Link to={url}>
             <div
                 style={{
-                    borderRight:
-                        border == "right"
-                            ? "10px solid #fff"
-                            : "2px solid #fff",
-                    borderLeft:
-                        border == "left" ? "10px solid #fff" : "2px solid #fff",
+                    // borderRight:
+                    //     border == "right"
+                    //         ? "10px solid #fff"
+                    //         : "2px solid #fff",
+                    // borderLeft:
+                    //     border == "left" ? "10px solid #fff" : "2px solid #fff",
                     width: "250px",
                     background: `${color}`,
-                    border: "2px solid #fff",
+                    border: "4px solid #fff",
+                    borderRadius: "20px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -186,7 +186,9 @@ const Map = observer(() => {
         <>
             <div
                 style={{
-                    height: "1000px",
+                    position: "relative",
+                    overflow: "hidden",
+                    height: "1500px",
                     background: "#1E1E1E",
                     display: "flex",
                     flexDirection: "column",

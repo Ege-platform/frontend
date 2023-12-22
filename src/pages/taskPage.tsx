@@ -32,6 +32,9 @@ const TaskPage = observer(() => {
                 "russian",
                 egeId,
             );
+            // TODO: h5p folder
+            // FIXME: redirect public folder to content_url
+            data.id = 662843439;
             setActivity(data);
             setLoading(false);
         };

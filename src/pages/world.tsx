@@ -75,7 +75,7 @@ const World = observer(() => {
                 return {
                     egeId: obj.egeId,
                     info: obj.info,
-                    current: true,
+                    current: false,
                 };
             });
             setTasks(tasksData);

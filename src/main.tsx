@@ -31,21 +31,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         circleTextColor: "#fff",
                         defaultColor: "#fff",
                     },
+                    Typography: {
+                        titleMarginTop: 0,
+                        titleMarginBottom: 0,
+                    },
                 },
             }}
         >
             <RouterProvider router={router} />
-            {/* <Routes>
-                    <Route path="/test" element={<Test />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/" element={<TestNav />}>
-                        <Route path="/" element={<Map />} />
-                        <Route path="me" element={<div></div>} />
-
-                        <Route path="task" element={<TaskPage />} />
-                    </Route>
-                </Routes> */}
         </ConfigProvider>
+        ,
     </React.StrictMode>,
 );

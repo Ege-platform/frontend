@@ -44,16 +44,9 @@
     padding: 0;
 }
 
-.buttonBar {
-    display: flex;
-    max-width: fit-content;
-}
 
-.navBarMobile {
-    display: flex;
-    justify-content: space-between;
-    padding-left: 20px;
-}
+
+
 
 @media screen and (min-width: 500px) {
     .navBarMobile {

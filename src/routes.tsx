@@ -7,6 +7,7 @@ import Map from "./pages/mapPage";
 import World from "./pages/world";
 import ProtectedRoute from "./router/ProtectedRoute";
 import EgePage from "./pages/egeTask/index";
+import EgeTaskPage from "./pages/egeTask/variant";
 import TaskPage from "./pages/taskPage";
 
 export const router = createBrowserRouter([
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
             {
                 path: "/task",
                 element: <EgePage />,
+            },
+            {
+                path: "/task/:variantId",
+                element: <EgeTaskPage />,
             },
             {
                 path: "/world/:worldName/:egeId",

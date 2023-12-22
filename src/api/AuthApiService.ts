@@ -25,7 +25,12 @@ class AuthApiService {
             API_URL + "/auth/signup",
             data,
         );
-
+        if (response.status == 201 || response.status == 200) {
+            localStorage.setItem(
+                "token",
+                JSON.stringify(response.data.accessToken),
+            );
+        }
         return response.data;
     }
     public async getVkLink(): Promise<string> {
