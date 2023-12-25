@@ -1,4 +1,4 @@
-import { MenuOutlined } from "@ant-design/icons";
+import { MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import {
     Drawer,
@@ -10,6 +10,9 @@ import {
     Typography,
     Row,
     Col,
+    Grid,
+    Progress,
+    theme,
 } from "antd";
 
 import logo from "../assets/logo.svg";
@@ -17,6 +20,8 @@ import coinIcon from "../assets/coinIcon.svg";
 import { useEffect, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { rootStore } from "../stores/RootStore";
+
+const { useBreakpoint } = Grid;
 
 const { Header, Footer, Content } = Layout;
 
@@ -34,12 +39,6 @@ const contentStyle: React.CSSProperties = {
     // marginRight: "16px",
 };
 
-const footerStyle: React.CSSProperties = {
-    textAlign: "center",
-    color: "#fff",
-    backgroundColor: "#10062B",
-};
-
 const profileDropDownItems = [
     {
         key: "1",
@@ -54,15 +53,30 @@ const profileDropDownItems = [
 const navItems = [
     {
         key: "map",
-        label: <Link to="/map">Вселенная</Link>,
+        label: (
+            <Link to="/map" style={{ color: "#10062B" }}>
+                Вселенная
+            </Link>
+        ),
+        path: "/map",
     },
     {
         key: "task",
-        label: <Link to="/task">Задачи</Link>,
+        label: (
+            <Link to="/task" style={{ color: "#10062B" }}>
+                Задачи
+            </Link>
+        ),
+        path: "/task",
     },
     {
         key: "library",
-        label: <Link to="/lib">Шпаргалки</Link>,
+        label: (
+            <Link to="/lib" style={{ color: "#10062B" }}>
+                Шпаргалки
+            </Link>
+        ),
+        path: "/lib",
     },
 ];
 
@@ -87,6 +101,7 @@ function AppMenu({ isInline = false, pathName = "", closeMenu }: AppMenuProps) {
 }
 
 const TestNav = observer(() => {
+    const screens = useBreakpoint();
     const location = useLocation();
     const [openMenu, setOpenMenu] = useState(false);
     const [coins, setCoins] = useState<number>(0);
@@ -106,6 +121,7 @@ const TestNav = observer(() => {
         setPath(location.pathname);
     }, [location]);
 
+    console.log(screens);
     return (
         <Layout
             style={{
@@ -115,80 +131,192 @@ const TestNav = observer(() => {
             }}
         >
             <Header style={headerStyle}>
-                <div>
-                    <div className="buttonBar">
-                        <Row align={"middle"}>
-                            <Col span={6}>
-                                <MenuOutlined
-                                    onClick={() => {
-                                        setOpenMenu(true);
+                {!screens.lg && (
+                    <div>
+                        <div className="buttonBar">
+                            <Row align={"middle"}>
+                                <Col
+                                    span={6}
+                                    style={{
+                                        display: "flex",
+                                        alignContent: "start",
+                                        padding: "16px",
                                     }}
-                                />
-                            </Col>
-                            <Col span={12}>
-                                <Row justify={"center"} align={"middle"}>
-                                    <Col>
-                                        <Typography.Title
-                                            level={5}
-                                            style={{ margin: 0 }}
-                                        >
-                                            {username}
-                                        </Typography.Title>
-                                    </Col>
-                                    <Col>
-                                        <div
-                                            style={{
-                                                border: "2px solid #605DE3",
-                                                borderRadius: "16px",
-                                                maxHeight: "36px",
-                                                maxWidth: "80px",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                fontSize: "16px",
-                                                fontWeight: "bold",
-                                            }}
-                                        >
-                                            <img
-                                                src={coinIcon}
-                                                style={{ minHeight: "36px" }}
-                                            />
-                                            <p>{coins}</p>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col span={6}>
-                                <Dropdown
-                                    menu={{ items: profileDropDownItems }}
                                 >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
+                                    <MenuOutlined
+                                        onClick={() => {
+                                            setOpenMenu(true);
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <Row justify={"center"} align={"middle"}>
+                                        <Col>
+                                            <Typography style={{ margin: 0 }}>
+                                                {username}
+                                            </Typography>
+                                        </Col>
+                                        <Col>
+                                            <div
+                                                style={{
+                                                    border: "2px solid #605DE3",
+                                                    borderRadius: "16px",
+                                                    maxHeight: "36px",
+                                                    maxWidth: "80px",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    fontSize: "16px",
+                                                    fontWeight: "bold",
+                                                }}
+                                            >
+                                                <img
+                                                    src={coinIcon}
+                                                    style={{
+                                                        minHeight: "36px",
+                                                    }}
+                                                />
+                                                <p>{coins}</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col
+                                    span={6}
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <Dropdown
+                                        menu={{
+                                            items: profileDropDownItems,
                                         }}
                                     >
-                                        <img src={logo} />
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <img src={logo} />
+                                        </div>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                )}
+                {screens.lg && (
+                    <Row justify={"space-between"}>
+                        <Col
+                            lg={16}
+                            xl={18}
+                            style={{
+                                padding: "10px",
+                            }}
+                        >
+                            <Row justify={"start"} align={"middle"}>
+                                <img src={logo} style={{ height: "38px" }} />
+                                {navItems.map((item) => (
+                                    <Col
+                                        key={item.key}
+                                        style={{
+                                            marginLeft: "20px",
+                                            marginRight: "20px",
+                                        }}
+                                    >
+                                        <Typography.Title
+                                            level={5}
+                                            style={{
+                                                margin: 0,
+
+                                                fontWeight:
+                                                    useLocation().pathname.includes(
+                                                        item.path,
+                                                    )
+                                                        ? "bold"
+                                                        : "normal",
+                                            }}
+                                        >
+                                            {item.label}
+                                        </Typography.Title>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Col>
+
+                        {/* AvatarLogo, coins, level */}
+                        <Col lg={8} xl={6}>
+                            <Row justify={"space-between"} align={"middle"}>
+                                <Col>
+                                    <Avatar
+                                        shape="square"
+                                        size={40}
+                                        icon={<UserOutlined />}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Typography
+                                        style={{
+                                            marginTop: 0,
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {username}
+                                    </Typography>
+                                    <Typography
+                                        style={{
+                                            fontWeight: "bold",
+                                            color: "#1E1E1E66",
+                                        }}
+                                    >
+                                        Статус
+                                    </Typography>
+                                </Col>
+                                <Col>
+                                    <div
+                                        style={{
+                                            border: "2px solid #605DE3",
+                                            borderRadius: "16px",
+                                            maxHeight: "36px",
+                                            maxWidth: "80px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        <img
+                                            src={coinIcon}
+                                            style={{
+                                                minHeight: "36px",
+                                            }}
+                                        />
+                                        <p>{coins}</p>
                                     </div>
-                                </Dropdown>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
-                <div className="navBar">
-                    <AppMenu
-                        pathName={path}
-                        closeMenu={() => {
-                            setOpenMenu(false);
-                        }}
-                    />
-                    <div className="buttonBar">
-                        <Space size={"middle"}>
-                            <Dropdown menu={{ items: profileDropDownItems }}>
-                                <Avatar />
-                            </Dropdown>
-                        </Space>
-                    </div>
-                </div>
+                                </Col>
+                                <Col>
+                                    <Progress
+                                        type="circle"
+                                        size="small"
+                                        trailColor="#605DE333"
+                                        percent={72}
+                                        strokeWidth={10}
+                                        strokeColor="#605DE3"
+                                        showInfo
+                                        format={(percent) => (
+                                            <span style={{ color: "#10062B" }}>
+                                                {percent}%
+                                            </span>
+                                        )}
+                                    />
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                )}
 
                 <Drawer
                     placement="left"
@@ -213,8 +341,6 @@ const TestNav = observer(() => {
             <Content style={contentStyle}>
                 <Outlet />
             </Content>
-
-            {/* <Footer style={footerStyle}>Footer</Footer> */}
         </Layout>
     );
 });

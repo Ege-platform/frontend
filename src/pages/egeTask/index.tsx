@@ -81,25 +81,23 @@ const EgeTaskRow = observer((props: IEgeTask) => {
             align={"middle"}
             style={{ paddingTop: "10px" }}
         >
-            {matches && (
-                // align Progress in center of Col
-                <Col
-                    md={2}
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Progress
-                        size={40}
-                        type="circle"
-                        percent={progress}
-                        strokeColor={{ from: strokeColor, to: strokeColor }}
-                    />
-                </Col>
-            )}
-            <Col xs={2} md={2}>
+            <Col
+                xs={0}
+                md={4}
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <Progress
+                    size={40}
+                    type="circle"
+                    percent={progress}
+                    strokeColor={{ from: strokeColor, to: strokeColor }}
+                />
+            </Col>
+            <Col xs={4} md={2}>
                 <div
                     style={{
                         display: "flex",
@@ -121,28 +119,28 @@ const EgeTaskRow = observer((props: IEgeTask) => {
                     </Typography>
                 </div>
             </Col>
-            <Col xs={14} md={16}>
+            <Col xs={14} md={12} xl={14}>
                 <Typography.Text>{description}</Typography.Text>
             </Col>
-            <Col xs={4} md={4}>
+            <Col xs={4} md={6} xl={3}>
                 <Row justify={"center"} align={"middle"}>
-                    {matches && (
-                        <Col sm={6}>
-                            {/* TODO: create separate element for taskCount controls */}
-                            <Button
-                                style={{
-                                    backgroundColor: strokeColor,
-                                    color: "#fff",
-                                    fontSize: "16px",
-                                    height: "100%",
-                                }}
-                                onClick={onMinusClick}
-                            >
-                                -
-                            </Button>
-                        </Col>
-                    )}
+                    <Col xs={0} sm={6}>
+                        {/* TODO: create separate element for taskCount controls */}
+                        <Button
+                            style={{
+                                backgroundColor: strokeColor,
+                                color: "#fff",
+                                fontSize: "16px",
+                                height: "100%",
+                            }}
+                            onClick={onMinusClick}
+                        >
+                            -
+                        </Button>
+                    </Col>
+
                     <Col
+                        xs={24}
                         sm={12}
                         style={{
                             textAlign: "center",
@@ -166,22 +164,21 @@ const EgeTaskRow = observer((props: IEgeTask) => {
                             onChange={onChange}
                         />
                     </Col>
-                    {matches && (
-                        <Col sm={6}>
-                            {" "}
-                            <Button
-                                style={{
-                                    backgroundColor: strokeColor,
-                                    color: "#fff",
-                                    fontSize: "16px",
-                                    height: "100%",
-                                }}
-                                onClick={onPlusClick}
-                            >
-                                +
-                            </Button>
-                        </Col>
-                    )}
+
+                    <Col xs={0} sm={6}>
+                        {" "}
+                        <Button
+                            style={{
+                                backgroundColor: strokeColor,
+                                color: "#fff",
+                                fontSize: "16px",
+                                height: "100%",
+                            }}
+                            onClick={onPlusClick}
+                        >
+                            +
+                        </Button>
+                    </Col>
                 </Row>
             </Col>
         </Row>
@@ -259,7 +256,7 @@ const EgePage = observer(() => {
 
     return (
         <>
-            <Row justify={"center"}>
+            <Row justify={"center"} gutter={[30, 0]}>
                 <Col xs={22} sm={22} lg={18}>
                     {tasks.length > 0 ? (
                         tasks.map((value, index) => {
@@ -280,25 +277,23 @@ const EgePage = observer(() => {
                         </>
                     )}
                 </Col>
-                {screens.lg && (
-                    <Col xs={0} sm={0} md={6}>
-                        {/* map over category colors and display card */}
-                        {Object.keys(categoryColors).map((key, index) => {
-                            return (
-                                <Row
-                                    key={index}
-                                    justify={"center"}
-                                    style={{ marginBottom: "10px" }}
-                                >
-                                    <EgeCategoryCard
-                                        category={key}
-                                        color={categoryColors[key]}
-                                    />
-                                </Row>
-                            );
-                        })}
-                    </Col>
-                )}
+                <Col xs={0} sm={0} md={4}>
+                    {/* map over category colors and display card */}
+                    {Object.keys(categoryColors).map((key, index) => {
+                        return (
+                            <Row
+                                key={index}
+                                justify={"center"}
+                                style={{ marginBottom: "10px" }}
+                            >
+                                <EgeCategoryCard
+                                    category={key}
+                                    color={categoryColors[key]}
+                                />
+                            </Row>
+                        );
+                    })}
+                </Col>
             </Row>
             <Divider />
             <Row justify={"center"} style={{ marginBottom: "50px" }}>
