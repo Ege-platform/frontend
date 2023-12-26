@@ -35,7 +35,6 @@ export default function RegisterPage() {
     }, [email, firstName, lastName, phone, password]);
 
     const register = () => {
-        console.log(phone);
         setLoading(true);
         if (!email || !firstName || !lastName || !phone || !password) {
             setErr("Заполните все поля");
@@ -52,9 +51,7 @@ export default function RegisterPage() {
                 password: password,
             })
                 .then((tokenData) => {
-                    console.log(tokenData);
                     UserApiServiceInstance.getUserData().then((userData) => {
-                        console.log(userData);
                         rootStore.setUser(userData);
                         navigate("/map");
                         return;

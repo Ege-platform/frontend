@@ -4,7 +4,6 @@ import {
     Drawer,
     Layout,
     Menu,
-    Space,
     Avatar,
     Dropdown,
     Typography,
@@ -12,7 +11,6 @@ import {
     Col,
     Grid,
     Progress,
-    theme,
 } from "antd";
 
 import logo from "../assets/logo.svg";
@@ -23,7 +21,7 @@ import { rootStore } from "../stores/RootStore";
 
 const { useBreakpoint } = Grid;
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 
 const headerStyle: React.CSSProperties = {
     textAlign: "center",
@@ -107,7 +105,7 @@ const TestNav = observer(() => {
     const [openMenu, setOpenMenu] = useState(false);
     const [coins, setCoins] = useState<number>(0);
     const [username, setUsername] = useState<string>("");
-    // const path = location.pathname;
+
     const [path, setPath] = useState("map");
 
     useEffect(() => {
@@ -122,7 +120,6 @@ const TestNav = observer(() => {
         setPath(location.pathname);
     }, [location]);
 
-    console.log(screens);
     return (
         <Layout
             style={{

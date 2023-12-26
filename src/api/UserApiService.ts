@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { API_URL } from "../config";
 import { IUser } from "./models/IUser";
 import { IActivitiesProgress } from "./models/IActivitiesProgress";
@@ -16,8 +16,8 @@ class UserApiService {
                 },
             );
             return response.data;
-        } catch (error: AxiosError | any) {
-            if (error.response.status === 401) {
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
                 localStorage.removeItem("token");
             }
         }
@@ -35,7 +35,7 @@ class UserApiService {
                 },
             );
             return response.data;
-        } catch (error: AxiosError | unknown) {
+        } catch (error: unknown) {
             console.log(error);
         }
     }
@@ -52,7 +52,7 @@ class UserApiService {
                 },
             );
             return response.data;
-        } catch (error: AxiosError | any) {
+        } catch (error: unknown) {
             console.log(error);
         }
     }
@@ -68,7 +68,7 @@ class UserApiService {
                 },
             );
             return response.data;
-        } catch (error: AxiosError | any) {
+        } catch (error:  unknown) {
             console.log(error);
         }
     }

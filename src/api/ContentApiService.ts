@@ -3,7 +3,6 @@ import type {
     IPlayerModel,
     IContentMetadata,
 } from "@lumieducation/h5p-server";
-import axios from "axios";
 import { CONTENT_URL } from "../config";
 
 export interface IContentListEntry {
@@ -21,11 +20,11 @@ export interface IContentService {
         contextId?: string,
         asUserId?: string,
         readOnlyState?: boolean,
-    ): Promise<any>;
+    ): Promise<unknown>;
     list(): Promise<IContentListEntry[]>;
     save(
         contentId: string,
-        requestBody: { library: string; params: any },
+        requestBody: { library: string; params: unknown },
     ): Promise<{ contentId: string; metadata: IContentMetadata }>;
     generateDownloadLink(contentId: string): string;
 }
@@ -54,20 +53,12 @@ export class ContentService implements IContentService {
                         const loginData = await res.json();
                         if (loginData.csrfToken) {
                             localStorage.setItem("csfr", loginData.csrfToken);
-                            console.log("set token");
+
                             this.setCsrfToken(loginData.csrfToken);
-                        } else {
-                            console.log("something went wrong");
                         }
-                    } else {
-                        // FIXME cstf tokens
-                        console.log("something went wrong");
-                        console.log(res);
                     }
                 })
-                .catch((reason) => {
-                    console.log(reason);
-                });
+                .catch(() => {});
         };
         login();
     }
@@ -75,7 +66,6 @@ export class ContentService implements IContentService {
     private csrfToken: string | undefined = undefined;
 
     delete = async (contentId: string): Promise<void> => {
-        console.log(`ContentService: deleting ${contentId}...`);
         const result = await fetch(`${this.baseUrl}/${contentId}`, {
             method: "delete",
             headers: {
@@ -92,9 +82,6 @@ export class ContentService implements IContentService {
     };
 
     getEdit = async (contentId: string): Promise<IEditorModel> => {
-        console.log(
-            `ContentService: Getting information to edit ${contentId}...`,
-        );
         const res = await fetch(`${this.baseUrl}/${contentId}/edit`);
         if (!res || !res.ok) {
             throw new Error(`${res.status} ${res.statusText}`);
@@ -108,16 +95,6 @@ export class ContentService implements IContentService {
         asUserId?: string,
         readOnlyState?: boolean,
     ): Promise<IPlayerModel> => {
-        console.log(
-            `ContentService: Getting information to play ${contentId}${
-                contextId ? `, contextId ${contextId}` : ""
-            }${asUserId ? `, asUserId ${asUserId}` : ""}${
-                readOnlyState !== undefined
-                    ? `, readOnlyState ${readOnlyState}`
-                    : ""
-            }...`,
-        );
-
         const query = new URLSearchParams();
         if (contextId) {
             query.append("contextId", contextId);
@@ -142,50 +119,7 @@ export class ContentService implements IContentService {
         return res.json();
     };
 
-    // getPlay = async (
-    //     contentId: string,
-    //     contextId?: string,
-    //     asUserId?: string,
-    //     readOnlyState?: boolean,
-    // ): Promise<any> => {
-    //     console.log(
-    //         `ContentService: Getting information to play ${contentId}${
-    //             contextId ? `, contextId ${contextId}` : ""
-    //         }${asUserId ? `, asUserId ${asUserId}` : ""}${
-    //             readOnlyState !== undefined
-    //                 ? `, readOnlyState ${readOnlyState}`
-    //                 : ""
-    //         }...`,
-    //     );
-
-    //     const query = new URLSearchParams();
-    //     if (contextId) {
-    //         query.append("contextId", contextId);
-    //     }
-    //     if (asUserId) {
-    //         query.append("asUserId", asUserId);
-    //     }
-    //     if (readOnlyState === true) {
-    //         query.append("readOnlyState", "yes");
-    //     }
-
-    //     const queryString = query.toString();
-
-    //     const res = await axios.get(
-    //         `${this.baseUrl}/play/${contentId}${
-    //             queryString ? `?${queryString}` : ""
-    //         }`,
-    //         { responseType: "document" },
-    //     );
-    //     // if (!res || !res.ok) {
-    //     //     throw new Error(`${res.status} ${res.statusText}`);
-    //     // }
-    //     return res;
-    // };
-
     list = async (): Promise<IContentListEntry[]> => {
-        console.log(this.csrfToken);
-        console.log(`ContentService: Listing content objects`);
         const result = await fetch(this.baseUrl, {
             headers: {
                 "CSRF-Token":
@@ -205,14 +139,8 @@ export class ContentService implements IContentService {
 
     save = async (
         contentId: string,
-        requestBody: { library: string; params: any },
+        requestBody: { library: string; params: unknown },
     ): Promise<{ contentId: string; metadata: IContentMetadata }> => {
-        if (contentId) {
-            console.log(`ContentService: Saving new content.`);
-        } else {
-            console.log(`ContentService: Saving content ${contentId}`);
-        }
-
         const body = JSON.stringify(requestBody);
 
         const res = contentId

@@ -11,9 +11,9 @@ import {
 } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { TaskApiServiceInstance } from "../../api/taskApiService";
+import { TaskApiServiceInstance } from "../../api/TaskApiService";
 import { IEgeTaskModel } from "../../api/models/IEgeTaskModel";
 import { getStrokeColor } from "../../utils/colors";
 const { useBreakpoint } = Grid;
@@ -48,14 +48,6 @@ const TaskCard = observer((props: TaskCardProps) => {
             children: <Typography>{task.solution}</Typography>,
         },
     ];
-
-    const onCollapseChange = (key: string | string[]) => {
-        console.log(key);
-    };
-
-    useEffect(() => {
-        console.log(screens);
-    }, [screens]);
 
     return (
         <Card>
@@ -101,11 +93,7 @@ const TaskCard = observer((props: TaskCardProps) => {
                 </Col>
             </Row>
             <br />
-            <Collapse
-                defaultActiveKey={[]}
-                onChange={onCollapseChange}
-                items={items}
-            />
+            <Collapse defaultActiveKey={[]} items={items} />
         </Card>
     );
 });
@@ -122,7 +110,7 @@ const EgeTaskPage = observer(() => {
             setTasks(data.tasks);
         }
         getTasks();
-    }, []);
+    }, [variantId]);
 
     return (
         <>
@@ -135,7 +123,7 @@ const EgeTaskPage = observer(() => {
                 Вернуться назад{" "}
             </Button>
             <Typography.Title>
-                Вариант <Link>№31231</Link>
+                Вариант <a>№31231</a>
             </Typography.Title>
             <br />
             <Row gutter={[16, 16]}>

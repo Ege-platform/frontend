@@ -10,11 +10,15 @@ import {
     Card,
     Grid,
 } from "antd";
-import { getStrokeColor } from "../../utils/colors";
+import {
+    getStrokeColor,
+    categoryColors,
+    getFillColor,
+} from "../../utils/colors";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useMediaQuery } from "usehooks-ts";
+
 import { TaskApiServiceInstance } from "../../api/TaskApiService";
 import { IEgeTask } from "../../api/models/IEgeTask";
 import { rootStore } from "../../stores/RootStore";
@@ -22,8 +26,7 @@ import { rootStore } from "../../stores/RootStore";
 const { useBreakpoint } = Grid;
 
 const EgeTaskRow = observer((props: IEgeTask) => {
-    const matches = useMediaQuery("(min-width: 768px)");
-    // TODO: create enums with colors for futher usage
+    const screens = useBreakpoint();
     const {
         progress,
         availableCount,
@@ -36,7 +39,6 @@ const EgeTaskRow = observer((props: IEgeTask) => {
     const [taskCount, setTaskCount] = useState<number>(0);
 
     const onChange = (value: number | null) => {
-        console.log("changed", value);
         if (value) {
             setTaskCount(value);
             rootStore.addEgeTask({
@@ -57,8 +59,6 @@ const EgeTaskRow = observer((props: IEgeTask) => {
             subject: "russian",
         });
         setTaskCount(taskCount + 1);
-
-        console.log("plus");
     };
 
     const onMinusClick = () => {
@@ -71,8 +71,6 @@ const EgeTaskRow = observer((props: IEgeTask) => {
             subject: "russian",
         });
         setTaskCount(taskCount - 1);
-
-        console.log("minus");
     };
 
     return (
@@ -81,22 +79,25 @@ const EgeTaskRow = observer((props: IEgeTask) => {
             align={"middle"}
             style={{ paddingTop: "10px" }}
         >
-            <Col
-                xs={0}
-                md={4}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <Progress
-                    size={40}
-                    type="circle"
-                    percent={progress}
-                    strokeColor={{ from: strokeColor, to: strokeColor }}
-                />
-            </Col>
+            {screens.md ? (
+                <Col
+                    xs={0}
+                    md={4}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Progress
+                        size={40}
+                        type="circle"
+                        percent={progress}
+                        strokeColor={{ from: strokeColor, to: strokeColor }}
+                    />
+                </Col>
+            ) : null}
+
             <Col xs={4} md={2}>
                 <div
                     style={{
@@ -214,17 +215,7 @@ const EgeCategoryCard = (props: IEgeCategoryCardProps) => {
     );
 };
 
-const categoryColors = {
-    punctuation: "#FAB02D",
-    norm: "#7CB518",
-    orthography: "#F96108",
-    text: "#605DE3",
-};
-
 const EgePage = observer(() => {
-    const screens = useBreakpoint();
-    console.log(screens);
-
     const navigate = useNavigate();
     const [tasks, setTasks] = useState<IEgeTask[]>([]);
 
@@ -236,18 +227,13 @@ const EgePage = observer(() => {
         fetchData();
     }, []);
 
-    // useEffect(() => {
-    //     // hide category cards on mobile
-    //     console.log(screens);
-    // }, [screens]);
-
     const submitCreateEgeVariant = () => {
         async function create() {
             const data = rootStore.egeCreateRequest;
             const response = await TaskApiServiceInstance.createEgeExample(
                 data,
             );
-            console.log(response.variantId);
+
             rootStore.clearEgeTask();
             navigate(`/task/${response.variantId}`);
         }
@@ -288,7 +274,7 @@ const EgePage = observer(() => {
                             >
                                 <EgeCategoryCard
                                     category={key}
-                                    color={categoryColors[key]}
+                                    color={getFillColor(key)}
                                 />
                             </Row>
                         );

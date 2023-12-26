@@ -29,15 +29,17 @@ const LoginPage = observer(() => {
                 username: username,
                 password: password,
             })
-                .then((res) => {
+                .then(() => {
                     UserApiServiceInstance.getUserData().then((userData) => {
-                        console.log(userData);
+                        if (!userData) {
+                            return;
+                        }
                         rootStore.setUser(userData);
                         navigate("/map");
                         return;
                     });
                 })
-                .catch((err) => {
+                .catch(() => {
                     setErr("Введён неверный логин или пароль");
                 })
                 .finally(() => {

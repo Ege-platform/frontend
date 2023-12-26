@@ -47,7 +47,6 @@ const TaskPage = observer(() => {
             });
         }
     }, [loading]);
-    console.log(worldName, egeId);
 
     // const h5pContentId = 712691482;
     // 1305333008

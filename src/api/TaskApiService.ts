@@ -7,6 +7,7 @@ import { IEgeTaskModel } from "./models/IEgeTaskModel";
 import { IEgeTaskCreate } from "./models/IEgeTaskCreate";
 
 interface createEgeResponse {
+    variantId: number;
     createdAt: string;
     tasks: IEgeTaskModel[];
 }

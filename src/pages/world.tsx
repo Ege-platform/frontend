@@ -159,14 +159,14 @@ const World = observer(() => {
                             `button${i + 1}`,
                         );
                         if (!buttonDiv1 || !buttonDiv2) return null;
-                        const x1 =
+                        let x1 =
                             buttonDiv1.getBoundingClientRect().left +
                             buttonRadius;
-                        const y1 = buttonDiv1.getBoundingClientRect().top;
-                        const x2 =
+                        let y1 = buttonDiv1.getBoundingClientRect().top;
+                        let x2 =
                             buttonDiv2.getBoundingClientRect().left +
                             buttonRadius;
-                        const y2 = buttonDiv2.getBoundingClientRect().top;
+                        let y2 = buttonDiv2.getBoundingClientRect().top;
 
                         if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {
                             console.error("Invalid coordinates:", {
@@ -178,10 +178,23 @@ const World = observer(() => {
                             return null;
                         }
 
+                        // Calculate the angle of the line between the two buttons
+                        const angle = Math.atan2(y2 - y1, x2 - x1);
+
+                        // Adjust the start points of the arcs to be at the button's border
+                        x1 = x1 + buttonRadius * Math.cos(angle);
+                        y1 = y1 + buttonRadius * Math.sin(angle);
+
+                        // Adjust the end points of the arcs to be at the button's border
+                        x2 = x2 - buttonRadius * Math.cos(angle);
+                        y2 = y2 - buttonRadius * Math.sin(angle);
+
+                        const radius = window.innerWidth / 2;
+
                         return (
                             <path
                                 key={i}
-                                d={`M ${x1} ${y1} A ${ellipseRadiusX} ${ellipseRadiusY} 0 0 1 ${x2} ${y2}`}
+                                d={`M ${x1} ${y1} A ${radius} ${radius} 0 0 0 ${x2} ${y2}`}
                                 stroke="#FFFFFF40"
                                 strokeWidth="2"
                                 fill="none"
@@ -192,7 +205,6 @@ const World = observer(() => {
                     return null;
                 });
                 setArcs(arcList);
-                console.log(arcList);
             }
         }
         // if (screen.xs || screen.sm) draw arcs that will connect buttons

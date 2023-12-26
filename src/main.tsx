@@ -1,7 +1,7 @@
 import { ConfigProvider } from "antd";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
 // import LoginPage from "./pages/login";
 // import RegisterPage from "./pages/register";
@@ -40,6 +40,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         >
             <RouterProvider router={router} />
         </ConfigProvider>
-        
     </React.StrictMode>,
 );

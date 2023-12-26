@@ -59,9 +59,6 @@ export default function NavBar() {
                     setCollapsed(broken);
                     console.log(broken);
                 }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
             >
                 <Menu
                     mode="inline"
@@ -122,7 +119,7 @@ export default function NavBar() {
                     </Space>
                 </div>
             </Header>
-            <Content >
+            <Content>
                 <Outlet />
             </Content>
         </Layout>
