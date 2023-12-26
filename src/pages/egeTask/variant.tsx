@@ -5,7 +5,6 @@ import {
     Card,
     Typography,
     Input,
-    Grid,
     Collapse,
     CollapseProps,
 } from "antd";
@@ -15,21 +14,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { TaskApiServiceInstance } from "../../api/TaskApiService";
 import { IEgeTaskModel } from "../../api/models/IEgeTaskModel";
-import { getStrokeColor } from "../../utils/colors";
-const { useBreakpoint } = Grid;
-
-// const mockTasks: IEgeTaskModel[] = [
-//     {
-//         id: 1,
-//         egeId: 1,
-//         subject: "russian",
-//         category: "punctuation",
-//         description:
-//             "Расставьте знаки препинания в предложении. Укажите предложения, в которых нужно поставить ОДНУ запятую. Запишите номера этих предложений.",
-//         text: "Расставьте знаки препинания в предложении. Укажите предложения, в которых нужно поставить ОДНУ запятую. Запишите номера этих предложений.",
-//         maxPoints: 5,
-//     },
-// ];
+import { getWorldInfo } from "../../utils/colors";
 
 interface TaskCardProps {
     index: number;
@@ -38,9 +23,9 @@ interface TaskCardProps {
 
 const TaskCard = observer((props: TaskCardProps) => {
     // TODO: что делаем с цифрой
-    const screens = useBreakpoint();
+
     const { index, task } = props;
-    const strokeColor = getStrokeColor(task.category);
+    const strokeColor = getWorldInfo(task.category)?.color;
     const items: CollapseProps["items"] = [
         {
             key: "1",

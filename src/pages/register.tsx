@@ -19,7 +19,9 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState<PhoneNumber | null>(null);
+    const [phone, setPhone] = useState<PhoneNumber | string | undefined>(
+        undefined,
+    );
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState<boolean>(false);
@@ -47,12 +49,12 @@ export default function RegisterPage() {
                 username: username,
                 firstName: firstName,
                 lastName: lastName,
-                phone: phone?.phoneNumber!,
+                phone: phone,
                 password: password,
             })
-                .then((tokenData) => {
+                .then((_) => {
                     UserApiServiceInstance.getUserData().then((userData) => {
-                        rootStore.setUser(userData);
+                        rootStore.setUser(userData!);
                         navigate("/map");
                         return;
                     });

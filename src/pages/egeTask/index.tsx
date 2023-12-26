@@ -10,11 +10,7 @@ import {
     Card,
     Grid,
 } from "antd";
-import {
-    getStrokeColor,
-    categoryColors,
-    getFillColor,
-} from "../../utils/colors";
+import { getWorldInfo, categoryColors } from "../../utils/colors";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
@@ -34,7 +30,7 @@ const EgeTaskRow = observer((props: IEgeTask) => {
         egeId,
         title: description,
     } = props;
-    const strokeColor = getStrokeColor(category);
+    const strokeColor = getWorldInfo(category)!.color;
 
     const [taskCount, setTaskCount] = useState<number>(0);
 
@@ -274,7 +270,7 @@ const EgePage = observer(() => {
                             >
                                 <EgeCategoryCard
                                     category={key}
-                                    color={getFillColor(key)}
+                                    color={getWorldInfo(key)!.color}
                                 />
                             </Row>
                         );

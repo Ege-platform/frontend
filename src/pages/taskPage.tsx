@@ -2,25 +2,25 @@ import { H5PPlayerUI } from "@lumieducation/h5p-react";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { ContentServiceInstance } from "../api/ContentApiService";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IActivity } from "../api/models/IActivity";
-import { rootStore } from "../stores/RootStore";
+
 import { UserApiServiceInstance } from "../api/UserApiService";
 
-interface TaskPageProps {
-    h5pContentId: number;
-}
-
 interface ParamTypes {
+    [key: string]: string;
     worldName: string;
-    egeId: number;
+    egeId: string;
 }
 
 const TaskPage = observer(() => {
     // "/world/:worldName/:egeId"
-    let { worldName, egeId } = useParams<ParamTypes>();
+    let { egeId } = useParams<ParamTypes>();
     const [loading, setLoading] = useState<boolean>(true);
     const [activity, setActivity] = useState<IActivity>();
+    if (!egeId) {
+        egeId = "1";
+    }
     useEffect(() => {
         // const act = rootStore.worldData?.find((value, index) => {
         //     value.egeId == Number(egeId);
@@ -30,11 +30,11 @@ const TaskPage = observer(() => {
         const fetchActivityData = async () => {
             const data = await UserApiServiceInstance.getActivityData(
                 "russian",
-                egeId,
+                Number(egeId),
             );
             // TODO: h5p folder
             // FIXME: redirect public folder to content_url
-            data.id = 662843439;
+            data!.id = 662843439;
             setActivity(data);
             setLoading(false);
         };
@@ -42,7 +42,7 @@ const TaskPage = observer(() => {
     }, []);
     useEffect(() => {
         if (!loading) {
-            ContentServiceInstance.getPlay(`${activity.id}`).then((res) => {
+            ContentServiceInstance.getPlay(`${activity!.id}`).then((res) => {
                 console.log(res);
             });
         }
@@ -56,7 +56,7 @@ const TaskPage = observer(() => {
     } else {
         return (
             <H5PPlayerUI
-                contentId={`${activity.id}`}
+                contentId={`${activity!.id}`}
                 loadContentCallback={async (contentId) => {
                     return ContentServiceInstance.getPlay(contentId);
                 }}

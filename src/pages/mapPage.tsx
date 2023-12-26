@@ -6,61 +6,81 @@ import { observer } from "mobx-react-lite";
 import { rootStore } from "../stores/RootStore";
 import { UserApiServiceInstance } from "../api/UserApiService";
 
-import colors from "../stores/index";
 import { IActivitiesProgress } from "../api/models/IActivitiesProgress";
+import { getWorldInfo } from "../utils/colors";
 
 interface ProgressCardData {
+    progress: string;
     title: string;
-    progress: number;
     color: string;
     url: string;
 }
 const cardsData = {
     norm: {
         title: "Мир норм",
-        color: colors.norm.color,
+        color: getWorldInfo("norm")!.color,
         url: "/world/norm",
+        progress: "0",
     },
     text: {
         title: "Мир текста",
-        color: colors.text.color,
+        color: getWorldInfo("text")!.color,
         url: "/world/text",
+        progress: "0",
     },
     orthography: {
         title: "Мир орфографии",
-        color: colors.orthography.color,
+        color: getWorldInfo("orthography")!.color,
         url: "/world/orthography",
+        progress: "0",
     },
     punctuation: {
         title: "Мир пунктуации",
-
-        color: colors.punctuation.color,
+        color: getWorldInfo("punctuation")!.color,
         url: "/world/punctuation",
+        progress: "0",
     },
 };
+
+function getCardsData(category: string) {
+    if (category === "norm") {
+        return cardsData.norm;
+    }
+    if (category === "text") {
+        return cardsData.text;
+    }
+    if (category === "orthography") {
+        return cardsData.orthography;
+    }
+    if (category === "punctuation") {
+        return cardsData.punctuation;
+    }
+
+    return cardsData.norm;
+}
 
 const processActivitiesProgress = (
     data: IActivitiesProgress[],
 ): ProgressCardData[] => {
-    const res = data.map((activityProgress: IActivitiesProgress) => {
-        // assemble ProgressCardData from activityProgress by accessing cardData by key
-        const card: ProgressCardData = cardsData[activityProgress.category];
+    return data.map((activityProgress: IActivitiesProgress) => {
+        //assemble ProgressCardData from activityProgress by accessing cardData by key
+        const card = getCardsData(activityProgress.category);
+        card.progress = activityProgress.progress.toString();
+        if (card.color === undefined) {
+            card.color = "#fff";
+        }
+
         return {
-            progress: activityProgress.category,
-            title: card.title,
-            color: card.color,
-            url: card.url,
+            ...card,
         };
     });
-
-    return res;
 };
 
 const generateRandomProperties = () => {
-    const x = Math.floor(Math.random() * window.innerWidth); // replace 1000 with the actual width of your map
-    const y = Math.floor(Math.random() * 1500); // replace 1000 with the actual height of your map
-    const opacity = Math.random(); // generates a random number between 0 (fully transparent) and 1 (fully opaque)
-    const size = Math.floor(Math.random() * (8 - 2 + 1)) + 2; // generates a random number between 2 and 8
+    const x = Math.floor(Math.random() * window.innerWidth);
+    const y = Math.floor(Math.random() * 1500);
+    const opacity = Math.random();
+    const size = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
     return { x, y, opacity, size };
 };
 
@@ -76,7 +96,7 @@ const ProgressCard = ({
     title,
     progress,
     color,
-    border,
+
     url,
 }: ProgressCardProps) => {
     return (

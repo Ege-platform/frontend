@@ -11,6 +11,9 @@ const ProtectedRoute = observer(() => {
     useEffect(() => {
         UserApiServiceInstance.getUserData()
             .then((userData) => {
+                if (!userData) {
+                    throw new Error("User not found");
+                }
                 rootStore.setUser(userData);
                 setComponent(<TestNav />);
             })

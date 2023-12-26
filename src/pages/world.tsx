@@ -9,9 +9,10 @@ import { UserApiServiceInstance } from "../api/UserApiService";
 // import rightLines from "../assets/right-lines.svg";
 // import leftLines from "../assets/left-lines.svg";
 // TODO: write utils function for defining world colors
-import colors from "../stores/index";
+
 import { Button, Row, Col, Grid } from "antd";
 import { IActivity } from "../api/models/IActivity";
+import { getWorldInfo } from "../utils/colors";
 
 const { useBreakpoint } = Grid;
 // activityCard with props: worldname and task IActivity
@@ -30,13 +31,17 @@ const ActivityCard = observer(
                         style={{
                             background:
                                 "radial-gradient(circle, #FFFFFF40, transparent)",
-                            border: `3px solid ${colors[worldName].color}`,
+                            border: `3px solid ${
+                                getWorldInfo(worldName!)?.color
+                            }`,
                             color: "white",
                             width: "100px",
                             height: "100px",
                             fontSize: "48px",
                             fontWeight: "bold",
-                            boxShadow: `0px 0px 20px 16px ${colors[worldName].color}1F`, // add shadow
+                            boxShadow: `0px 0px 20px 16px ${
+                                getWorldInfo(worldName!)?.color
+                            }1F`, // add shadow
                             textAlign: "center",
                             opacity: !active ? 0.5 : 1,
                         }}
@@ -52,34 +57,28 @@ const ActivityCard = observer(
 const World = observer(() => {
     const headerSize = 70;
     const screens = useBreakpoint();
-    const [loading, setLoading] = useState<boolean>(true);
+
     const [tasks, setTasks] = useState<IActivity[]>([]);
 
     const [ellipseRadiusX, setEllipseRadiusX] = useState<number>(0);
     const [ellipseRadiusY, setEllipseRadiusY] = useState<number>(0);
-    const [arcs, setArcs] = useState<JSX.Element | null[]>([]);
+    const [arcs, setArcs] = useState<JSX.Element[]>([]);
     const [lines, setLines] = useState<JSX.Element[]>([]);
 
     const { worldName } = useParams<string>();
 
     useEffect(() => {
         const fetchTasks = async () => {
-            setLoading(true);
             const data = await UserApiServiceInstance.getWorldData(
                 "russian",
                 worldName,
             );
+            if (!data) {
+                console.error("No data");
+                return;
+            }
             rootStore.setWorldData(data);
-            const tasksData = data?.map((obj: IActivity) => {
-                return {
-                    egeId: obj.egeId,
-                    info: obj.info,
-                    current: false,
-                };
-            });
-            setTasks(tasksData);
-
-            setLoading(false);
+            setTasks(data);
         };
         fetchTasks();
     }, []);
@@ -102,52 +101,61 @@ const World = observer(() => {
 
                 // Position the button
                 const buttonDiv = document.getElementById(`button${i}`);
-                if (!buttonDiv) return;
-                buttonDiv.style.position = "absolute";
-                buttonDiv.style.left = `${x}px`;
-                buttonDiv.style.top = `${y}px`;
+                if (buttonDiv) {
+                    buttonDiv.style.position = "absolute";
+                    buttonDiv.style.left = `${x}px`;
+                    buttonDiv.style.top = `${y}px`;
+                }
             }
 
-            // draw lines connecting buttons on large screen
-            const lines = tasks.map((task, i) => {
-                if (i < tasks.length - 1) {
-                    const buttonRadius = 50;
+            const lines = tasks
+                .map((_, i) => {
+                    if (i < tasks.length - 1) {
+                        const buttonRadius = 50;
 
-                    // Get the positions of the current button and the next button
-                    const buttonDiv1 = document.getElementById(`button${i}`);
-                    const buttonDiv2 = document.getElementById(
-                        `button${i + 1}`,
-                    );
-                    if (!buttonDiv1 || !buttonDiv2) return <></>;
-                    const x1 = parseInt(buttonDiv1.style.left) + buttonRadius;
-                    const y1 =
-                        parseInt(buttonDiv1.style.top) +
-                        buttonRadius -
-                        headerSize;
-                    const x2 = parseInt(buttonDiv2.style.left) + buttonRadius;
-                    const y2 =
-                        parseInt(buttonDiv2.style.top) +
-                        buttonRadius -
-                        headerSize;
+                        const buttonDiv1 = document.getElementById(
+                            `button${i}`,
+                        );
+                        const buttonDiv2 = document.getElementById(
+                            `button${i + 1}`,
+                        );
+                        if (buttonDiv1 && buttonDiv2) {
+                            const x1 =
+                                parseInt(buttonDiv1.style.left) + buttonRadius;
+                            const y1 =
+                                parseInt(buttonDiv1.style.top) +
+                                buttonRadius -
+                                headerSize;
+                            const x2 =
+                                parseInt(buttonDiv2.style.left) + buttonRadius;
+                            const y2 =
+                                parseInt(buttonDiv2.style.top) +
+                                buttonRadius -
+                                headerSize;
 
-                    // Create a path element
-                    return (
-                        <path
-                            d={`M ${x1} ${y1} A ${ellipseRadiusX} ${ellipseRadiusY} 0 0 1 ${x2} ${y2}`}
-                            stroke="#FFFFFF40"
-                            strokeWidth="2"
-                            fill="none"
-                            strokeDasharray="4"
-                        />
-                    );
-                }
-            });
+                            return (
+                                <path
+                                    d={`M ${x1} ${y1} A ${ellipseRadiusX} ${ellipseRadiusY} 0 0 1 ${x2} ${y2}`}
+                                    stroke="#FFFFFF40"
+                                    strokeWidth="2"
+                                    fill="none"
+                                    strokeDasharray="4"
+                                />
+                            );
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
+                })
+                .filter((item): item is JSX.Element => item !== undefined);
+
             setLines(lines);
         } else {
             setLines([]);
             if (!screens.md) {
-                if (tasks.length == 0) return;
-                const arcList = tasks.map((task, i) => {
+                const arcList = tasks.map((_, i) => {
                     if (i < tasks.length - 1) {
                         const buttonRadius = 50;
 
@@ -158,7 +166,7 @@ const World = observer(() => {
                         const buttonDiv2 = document.getElementById(
                             `button${i + 1}`,
                         );
-                        if (!buttonDiv1 || !buttonDiv2) return null;
+                        if (!buttonDiv1 || !buttonDiv2) return <></>;
                         let x1 =
                             buttonDiv1.getBoundingClientRect().left +
                             buttonRadius;
@@ -175,7 +183,7 @@ const World = observer(() => {
                                 x2,
                                 y2,
                             });
-                            return null;
+                            return <></>;
                         }
 
                         // Calculate the angle of the line between the two buttons
@@ -202,7 +210,7 @@ const World = observer(() => {
                             />
                         );
                     }
-                    return null;
+                    return <></>;
                 });
                 setArcs(arcList);
             }
@@ -256,7 +264,10 @@ const World = observer(() => {
                             );
                         })}
                         <Row justify={"center"}>
-                            <img src={colors[worldName].bossImage} alt="boss" />
+                            <img
+                                src={getWorldInfo(worldName!)!.bossImage}
+                                alt="boss"
+                            />
                         </Row>
                     </div>
                 </>
@@ -295,7 +306,7 @@ const World = observer(() => {
                         })}
                     </div>
                     <img
-                        src={colors[worldName].bossImage}
+                        src={getWorldInfo(worldName!)!.bossImage}
                         alt="boss"
                         style={{
                             position: "absolute",
