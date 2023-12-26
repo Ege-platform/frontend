@@ -31,7 +31,7 @@ const EgeTaskRow = observer((props: IEgeTask) => {
         egeId,
         title: description,
     } = props;
-    let strokeColor = getStrokeColor(category);
+    const strokeColor = getStrokeColor(category);
 
     const [taskCount, setTaskCount] = useState<number>(0);
 

@@ -83,12 +83,6 @@ const ProgressCard = ({
         <Link to={url}>
             <div
                 style={{
-                    // borderRight:
-                    //     border == "right"
-                    //         ? "10px solid #fff"
-                    //         : "2px solid #fff",
-                    // borderLeft:
-                    //     border == "left" ? "10px solid #fff" : "2px solid #fff",
                     width: "250px",
                     background: `${color}`,
                     border: "4px solid #fff",
@@ -189,7 +183,7 @@ const Map = observer(() => {
                     position: "relative",
                     overflow: "hidden",
                     height: "1500px",
-                    background: "#1E1E1E",
+                    background: "#10062B",
                     display: "flex",
                     flexDirection: "column",
                     gap: "20px",
@@ -208,7 +202,7 @@ const Map = observer(() => {
                             style={{
                                 alignSelf:
                                     i % 2 === 0 ? "flex-end" : "flex-start",
-                                margin: "20px", // adjust as needed
+                                margin: "20px",
                             }}
                         >
                             <ProgressCard

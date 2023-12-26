@@ -3,6 +3,7 @@ import { API_URL } from "../config";
 import { IUser } from "./models/IUser";
 import { IActivitiesProgress } from "./models/IActivitiesProgress";
 import { IActivity } from "./models/IActivity";
+
 import authHeader from "../utils/authHeaders";
 
 class UserApiService {
@@ -34,7 +35,7 @@ class UserApiService {
                 },
             );
             return response.data;
-        } catch (error: AxiosError | any) {
+        } catch (error: AxiosError | unknown) {
             console.log(error);
         }
     }

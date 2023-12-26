@@ -35,6 +35,7 @@ const headerStyle: React.CSSProperties = {
 
 const contentStyle: React.CSSProperties = {
     minHeight: "100%",
+    overflowX: "hidden",
     // marginLeft: "16px",
     // marginRight: "16px",
 };
@@ -93,7 +94,7 @@ function AppMenu({ isInline = false, pathName = "", closeMenu }: AppMenuProps) {
             items={navItems}
             selectedKeys={[pathName]}
             mode={isInline ? "inline" : "horizontal"}
-            onClick={(e) => {
+            onClick={() => {
                 closeMenu();
             }}
         />
@@ -212,6 +213,7 @@ const TestNav = observer(() => {
                         <Col
                             lg={16}
                             xl={18}
+                            xxl={20}
                             style={{
                                 padding: "10px",
                             }}
@@ -247,7 +249,7 @@ const TestNav = observer(() => {
                         </Col>
 
                         {/* AvatarLogo, coins, level */}
-                        <Col lg={8} xl={6}>
+                        <Col lg={8} xl={6} xxl={4}>
                             <Row justify={"space-between"} align={"middle"}>
                                 <Col>
                                     <Avatar
