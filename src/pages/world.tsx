@@ -1,21 +1,14 @@
-//TODO: изменение svg босса в зависимотси от мира и добавить ссылку на h5p
-
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { rootStore } from "../stores/RootStore";
 import { UserApiServiceInstance } from "../api/UserApiService";
 
-// import rightLines from "../assets/right-lines.svg";
-// import leftLines from "../assets/left-lines.svg";
-// TODO: write utils function for defining world colors
-
 import { Button, Row, Col, Grid } from "antd";
 import { IActivity } from "../api/models/IActivity";
 import { getWorldInfo } from "../utils/colors";
 
 const { useBreakpoint } = Grid;
-// activityCard with props: worldname and task IActivity
 
 const ActivityCard = observer(
     (props: { index: number; task: IActivity; active: boolean }) => {
@@ -88,18 +81,15 @@ const World = observer(() => {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
 
-            // Parameters for the ellipse
-            setEllipseRadiusX(window.innerWidth / 3); // Change this to adjust the width of the ellipse
-            setEllipseRadiusY(window.innerHeight / 3); // Change this to adjust the height of the ellipse
+            setEllipseRadiusX(window.innerWidth / 3);
+            setEllipseRadiusY(window.innerHeight / 3);
 
             for (let i = 0; i < tasks.length; i++) {
-                // Calculate the position in the ellipse
                 const angle =
                     ((2 * Math.PI) / tasks.length) * i + (3 * Math.PI) / 4;
                 const x = centerX + ellipseRadiusX * Math.cos(angle);
                 const y = centerY + ellipseRadiusY * Math.sin(angle);
 
-                // Position the button
                 const buttonDiv = document.getElementById(`button${i}`);
                 if (buttonDiv) {
                     buttonDiv.style.position = "absolute";
@@ -150,7 +140,7 @@ const World = observer(() => {
                     }
                 })
                 .filter((item): item is JSX.Element => item !== undefined);
-
+            setArcs([]);
             setLines(lines);
         } else {
             setLines([]);

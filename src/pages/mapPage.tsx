@@ -1,5 +1,6 @@
-import { Progress } from "antd";
+import { Progress, Grid } from "antd";
 import Star from "../assets/star.svg";
+import Galaxy from "../assets/galaxy.svg";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -8,6 +9,8 @@ import { UserApiServiceInstance } from "../api/UserApiService";
 
 import { IActivitiesProgress } from "../api/models/IActivitiesProgress";
 import { getWorldInfo } from "../utils/colors";
+
+const { useBreakpoint } = Grid;
 
 interface ProgressCardData {
     progress: string;
@@ -137,6 +140,7 @@ const ProgressCard = ({
 };
 
 const Map = observer(() => {
+    const screens = useBreakpoint();
     const [stars, setStars] = useState(
         Array.from({ length: 200 }).map((_, i) => {
             const { x, y, opacity, size } = generateRandomProperties();
@@ -181,9 +185,9 @@ const Map = observer(() => {
             }),
         );
         if (rootStore.mapData === null) {
-            // setActivitiesProgress([]);
+            setActivitiesProgress([]);
         } else {
-            // setActivitiesProgress(processActivitiesProgress(rootStore.mapData));
+            setActivitiesProgress(processActivitiesProgress(rootStore.mapData));
         }
         const fetchActivitiesProgress = async () => {
             const data = await UserApiServiceInstance.getSubjectProgress();
@@ -203,7 +207,10 @@ const Map = observer(() => {
                     position: "relative",
                     overflow: "hidden",
                     height: "1500px",
-                    background: "#10062B",
+                    // background: "#10062B",
+                    background: screens.md
+                        ? `url(${Galaxy}) center / 50%  no-repeat, #10062B`
+                        : "#10062B",
                     display: "flex",
                     flexDirection: "column",
                     gap: "20px",
